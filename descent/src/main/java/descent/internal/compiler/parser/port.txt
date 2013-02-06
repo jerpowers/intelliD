@@ -1,0 +1,56 @@
+This file list the porting process from DMD.
+
+Last DMD 1.x ported version: 1.045
+Last DMD 2.x ported version: 2.030
+
+-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-
+
+Remaining from DMD 1.050 vs. 1050
+----------------------------------
+attrib.c
+v
+
+Remaining from DMD 2.031 vs. 2.030
+----------------------------------
+ * attrib.c
+ * attrib.h
+ * cast.c
+ * class.c
+ * constfold.c
+ * declaration.c
+ * declaration.h
+ * dsymbol.c
+ * dsymbol.h
+ * enum.c
+ * enum.h
+ * expression.c
+ * expression.h
+ * func.c
+ * import.c
+ * init.c
+ * interpret.c
+ * lexer.c
+ * module.c
+ * module.h
+ * mtype.c
+ * mtype.h
+ * opover.c
+ * optimize.c
+ * scope.c
+ * scope.h
+ * statement.c
+ * statement.h
+ * struct.c
+ * template.c
+ * template.h
+ 
+Remaining from DMD 2.030 vs. 1.045
+------------------------------
+ * Parser::parseBaseClasses what's the difference?
+ 
+Remaining from DMD 1.028
+------------------------------
+class.c --> check if buildDtor is really necessary
+clone.c
+func.c  --> missing StaticCtorDeclaration::StaticCtorDeclaration 
+            and StaticDtorDeclaration::StaticDtorDeclaration

@@ -1,0 +1,52 @@
+<idea-plugin version="2">
+    <id>com.wyrdtech.d</id>
+    <name>D Language Support</name>
+    <version>0.0.1</version>
+    <vendor email="d-plugin@wyrdtech.com" url="http://d.wyrdtech.com">WyrdTech</vendor>
+
+    <description>
+      <![CDATA[
+      IntelliJ IDEA plugin providing support for the <a href=http://dlang.org>D Language</a>
+      ]]>
+    </description>
+
+    <change-notes>
+      <![CDATA[
+      0.0.1
+      <ul><li>Initial version</li></ul>
+      ]]>
+    </change-notes>
+
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="107.105"/>
+
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+
+        <!-- Register D file type -->
+        <fileTypeFactory implementation="com.wyrdtech.d.intellid.DFileTypeFactory"/>
+
+        <!-- Parser for D source
+        <lang.parserDefinition language="D" implementationClass="com.wyrdtech.d.intellid.parser.DParserDefinition"/>
+        -->
+
+    </extensions>
+
+</idea-plugin>

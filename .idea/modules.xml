@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/descent/descent.iml" filepath="$PROJECT_DIR$/descent/descent.iml" />
       <module fileurl="file://$PROJECT_DIR$/dlang/dlang.iml" filepath="$PROJECT_DIR$/dlang/dlang.iml" />
       <module fileurl="file://$PROJECT_DIR$/dparse/dparse.iml" filepath="$PROJECT_DIR$/dparse/dparse.iml" />
     </modules>
