@@ -32,7 +32,8 @@ public class LexOperator {
 
         // Parsing decisions are made on the not-yet-consumed next value, to
         // avoid consuming character after end of literal
-        char next = (char)in_stream.peek();
+//        char next = (char)n;
+        int next = n;
 
         switch (cur)
         {
@@ -222,7 +223,7 @@ public class LexOperator {
                         int p = in_stream.peek();
                         if (p != -1)
                         {
-                            switch ((char)c)
+                            switch ((char)p)
                             {
                                 case '=':
                                     in_stream.read();
