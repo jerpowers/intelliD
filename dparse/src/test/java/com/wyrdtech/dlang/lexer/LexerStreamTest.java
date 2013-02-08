@@ -35,12 +35,12 @@ public class LexerStreamTest {
         c = ls.peek();
         assertEquals('m', (char)c);
         assertEquals(1, ls.getLine());
-        assertEquals(4, ls.getCol());
+        assertEquals(3, ls.getCol());
 
         c = ls.read();
         assertEquals('m', (char)c);
         assertEquals(1, ls.getLine());
-        assertEquals(5, ls.getCol());
+        assertEquals(4, ls.getCol());
 
         ls.read(); // e
         ls.read(); // t
@@ -52,7 +52,7 @@ public class LexerStreamTest {
         c = ls.peek();
         assertEquals('\n', (char)c);
         assertEquals(1, ls.getLine());
-        assertEquals(9, ls.getCol());
+        assertEquals(10, ls.getCol());
 
         c = ls.read();
         assertEquals('\n', (char)c);
@@ -75,7 +75,7 @@ public class LexerStreamTest {
         c = ls.read();
         assertEquals('.', (char)c);
         assertEquals(2, ls.getLine());
-        assertEquals(15, ls.getCol());
+        assertEquals(14, ls.getCol());
 
         c = ls.read();
         assertEquals('\n', (char)c);

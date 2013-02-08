@@ -40,10 +40,10 @@ public class LexOperator {
                 switch (next)
                 {
                     case '+':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.Increment, x, y);
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.PlusAssign, x, y);
                 }
                 return new Token(TokenType.Plus, x, y);
@@ -51,13 +51,13 @@ public class LexOperator {
                 switch (next)
                 {
                     case '-':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.Decrement, x, y);
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.MinusAssign, x, y);
                     case '>':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.TildeAssign, x, y);
                 }
                 return new Token(TokenType.Minus, x, y);
@@ -65,7 +65,7 @@ public class LexOperator {
                 switch (next)
                 {
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.TimesAssign, x, y, 2);
                     default:
                         break;
@@ -75,7 +75,7 @@ public class LexOperator {
                 switch (next)
                 {
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.DivAssign, x, y, 2);
                 }
                 return new Token(TokenType.Div, x, y);
@@ -83,7 +83,7 @@ public class LexOperator {
                 switch (next)
                 {
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.ModAssign, x, y, 2);
                 }
                 return new Token(TokenType.Mod, x, y);
@@ -91,10 +91,10 @@ public class LexOperator {
                 switch (next)
                 {
                     case '&':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.LogicalAnd, x, y, 2);
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.BitwiseAndAssign, x, y, 2);
                 }
                 return new Token(TokenType.BitwiseAnd, x, y);
@@ -102,10 +102,10 @@ public class LexOperator {
                 switch (next)
                 {
                     case '|':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.LogicalOr, x, y, 2);
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.BitwiseOrAssign, x, y, 2);
                 }
                 return new Token(TokenType.BitwiseOr, x, y);
@@ -113,13 +113,13 @@ public class LexOperator {
                 switch (next)
                 {
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.XorAssign, x, y, 2);
                     case '^':
-                        read();
-                        if (peek() == '=')
+                        in_stream.read();
+                        if (in_stream.peek() == '=')
                         {
-                            read();
+                            in_stream.read();
                             return new Token(TokenType.PowAssign, x, y, 3);
                         }
                         return new Token(TokenType.Pow, x, y, 2);
@@ -129,22 +129,22 @@ public class LexOperator {
                 switch (next)
                 {
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.NotEqual, x, y, 2); // !=
 
                     case '<':
-                        read();
-                        switch (peek())
+                        in_stream.read();
+                        switch (in_stream.peek())
                         {
                             case '=':
-                                read();
+                                in_stream.read();
                                 return new Token(TokenType.UnorderedOrGreater, x, y, 3); // !<=
                             case '>':
-                                read();
-                                switch (peek())
+                                in_stream.read();
+                                switch (in_stream.peek())
                                 {
                                     case '=':
-                                        read();
+                                        in_stream.read();
                                         return new Token(TokenType.Unordered, x, y, 4); // !<>=
                                 }
                                 return new Token(TokenType.UnorderedOrEqual, x, y, 3); // !<>
@@ -152,11 +152,11 @@ public class LexOperator {
                         return new Token(TokenType.UnorderedGreaterOrEqual, x, y, 2); // !<
 
                     case '>':
-                        read();
-                        switch (peek())
+                        in_stream.read();
+                        switch (in_stream.peek())
                         {
                             case '=':
-                                read();
+                                in_stream.read();
                                 return new Token(TokenType.UnorderedOrLess, x, y, 3); // !>=
                             default:
                                 break;
@@ -169,7 +169,7 @@ public class LexOperator {
                 switch (next)
                 {
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.TildeAssign, x, y, 2);
                 }
                 return new Token(TokenType.Tilde, x, y);
@@ -177,10 +177,10 @@ public class LexOperator {
                 switch (next)
                 {
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.Equal, x, y, 2);
                     case '>':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.GoesTo, x, y, 2);
                 }
                 return new Token(TokenType.Assign, x, y);
@@ -188,29 +188,29 @@ public class LexOperator {
                 switch (next)
                 {
                     case '<':
-                        read();
-                        switch (peek())
+                        in_stream.read();
+                        switch (in_stream.peek())
                         {
                             case '=':
-                                read();
+                                in_stream.read();
                                 return new Token(TokenType.ShiftLeftAssign, x, y, 3);
                             default:
                                 break;
                         }
                         return new Token(TokenType.ShiftLeft, x, y, 2);
                     case '>':
-                        read();
-                        switch (peek())
+                        in_stream.read();
+                        switch (in_stream.peek())
                         {
                             case '=':
-                                read();
+                                in_stream.read();
                                 return new Token(TokenType.LessEqualOrGreater, x, y, 3);
                             default:
                                 break;
                         }
                         return new Token(TokenType.LessOrGreater, x, y, 2);
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.LessEqual, x, y, 2);
                 }
                 return new Token(TokenType.LessThan, x, y);
@@ -218,22 +218,24 @@ public class LexOperator {
                 switch (next)
                 {
                     case '>':
-                        read();
-                        if (peek() != -1)
+                        in_stream.read();
+                        int p = in_stream.peek();
+                        if (p != -1)
                         {
-                            switch ((char)peek())
+                            switch ((char)c)
                             {
                                 case '=':
-                                    read();
+                                    in_stream.read();
                                     return new Token(TokenType.ShiftRightAssign, x, y, 3);
                                 case '>':
-                                    read();
-                                    if (peek() != -1)
+                                    in_stream.read();
+                                    int q = in_stream.peek();
+                                    if (q != -1)
                                     {
-                                        switch ((char)peek())
+                                        switch ((char)q)
                                         {
                                             case '=':
-                                                read();
+                                                in_stream.read();
                                                 return new Token(TokenType.TripleRightShiftAssign, x, y, 4);
                                         }
                                         return new Token(TokenType.ShiftRightUnsigned, x, y, 3); // >>>
@@ -243,7 +245,7 @@ public class LexOperator {
                         }
                         return new Token(TokenType.ShiftRight, x, y, 2);
                     case '=':
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.GreaterEqual, x, y, 2);
                 }
                 return new Token(TokenType.GreaterThan, x, y);
@@ -259,15 +261,15 @@ public class LexOperator {
                 return new Token(TokenType.Comma, x, y);
             case '.':
                 // Prevent OverflowException when peek returns -1
-                int tmp = peek();
+                int tmp = in_stream.peek();
                 if (tmp > 0 && Character.isDigit(tmp))
                     return LexNumericLiteral.read(in_stream); //('.', col - 1);
                 else if (tmp == (int)'.')
                 {
-                    read();
-                    if ((char)peek() == '.') // Triple dot
+                    in_stream.read();
+                    if ((char)in_stream.peek() == '.') // Triple dot
                     {
-                        read();
+                        in_stream.read();
                         return new Token(TokenType.TripleDot, x, y, 3);
                     }
                     return new Token(TokenType.DoubleDot, x, y, 2);

@@ -13,9 +13,10 @@ public class Token {
     public final int end_col;
     public final int end_line;
 
-    public final String literalValue;
+    public final Object literalValue;
 
-    // public Token next;
+    //TODO: final
+    public Token next;
 
     public Token(TokenType type, int col, int line) {
         this.type = type;
@@ -39,7 +40,7 @@ public class Token {
         this.literalValue = null;
     }
 
-    public Token(TokenType type, int col, int line, int length, String literalValue)
+    public Token(TokenType type, int col, int line, int length, Object literalValue)
     {
         this.type = type;
         this.col = col;
@@ -50,7 +51,7 @@ public class Token {
         this.end_line = line;
     }
 
-    public Token(TokenType type, int col, int line, int end_col, int end_line, String literalValue)
+    public Token(TokenType type, int col, int line, int end_col, int end_line, Object literalValue)
     {
         this.type = type;
         this.col = col;
@@ -60,4 +61,12 @@ public class Token {
         this.literalValue = literalValue;
     }
 
+/*
+    public Token getNext() {
+        return next;
+    }
+    public void setNext(final Token next) {
+        this.next = next;
+    }
+*/
 }

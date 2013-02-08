@@ -46,10 +46,10 @@ public class LexerStream extends LineNumberReader {
     @Override
     public int read() throws IOException {
         int c = super.read();
-        if (this.getLineNumber() != line) {
+        if (super.getLineNumber() != line) {
             //TODO: check '\n' instead?
             col = 1;
-            line = this.getLineNumber(); // should be line+1
+            line = super.getLineNumber(); // should be line+1
         } else if (c >= 0) {
             col++;
         }
@@ -58,13 +58,30 @@ public class LexerStream extends LineNumberReader {
 
     /**
      * Peek at the next character without taking it off the stream.
+     * The same as calling peek(1)
      * @return Next character in stream
      * @throws IOException
      */
     public int peek() throws IOException {
-        this.mark(1);
+        super.mark(1);
         int c = super.read();
-        this.reset();
+        super.reset();
+
+        return c;
+    }
+
+    /**
+     * Peek at the Nth next character on the stream, without taking anything
+     * off the stream.  If the stream ends at or before the specified location,
+     * returns -1.
+     * @return Nth character in stream
+     * @throws IOException
+     */
+    public int peek(int i) throws IOException {
+        super.mark(i);
+
+        int c = super.read();
+        super.reset();
 
         return c;
     }

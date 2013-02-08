@@ -7,9 +7,11 @@ import java.io.Reader;
 /**
  * Lexer for the D language.
  *
- * Heavily inspired by the Visual D lexer:
- * http://www.dsource.org/projects/visuald
- * and Mono-D lexer:
+ * Written to be easy to understand/test, not for performance.
+ * Various lexing parts are broken up into separate classes by token type,
+ * these may do some non-optimal look ahead when finding end of token.
+ *
+ * Heavily inspired by the Mono-D lexer:
  * http://mono-d.alexanderbothe.com/
  */
 public class Lexer {
@@ -128,6 +130,7 @@ public class Lexer {
                     }
                     break;
                 case 'r':
+/*
                     peek = peek();
                     if (peek == '"')
                     {
@@ -137,6 +140,8 @@ public class Lexer {
                     }
                     else
                     goto default;
+*/
+/*
                 case '`':
                     token = ReadVerbatimString(nextChar);
                     break;
@@ -150,7 +155,9 @@ public class Lexer {
                     x = Col - 1;
                     y = Line;
                     var lit = ReadEscapeSequence(out ch, out surr);
-                    token = Token(TokenType.Literal, x, y, lit.Length + 1, lit/*, ch.ToString()*/, LiteralFormat.StringLiteral);
+                    token = Token(TokenType.Literal, x, y, lit.Length + 1, lit*/
+/*, ch.ToString()*//*
+, LiteralFormat.StringLiteral);
                     token.RawCodeRepresentation = ch.ToString();
                     OnError(y, x, "Escape sequence strings are deprecated!");
                     break;
@@ -182,13 +189,19 @@ public class Lexer {
                                     break;
                             }
 
-                            return Token(TokenType.Literal, Col - 1, Line, numString.Length + 1, ParseFloatValue(numString, 16), /*numString,*/ LiteralFormat.Scalar);
+                            return Token(TokenType.Literal, Col - 1, Line, numString.Length + 1, ParseFloatValue(numString, 16), */
+/*numString,*//*
+ LiteralFormat.Scalar);
                         }
                     }
                     else if (ch == 'q') // Token strings
                     {
                         peek = peek();
-                        if (peek == '{'/*q{ ... }*/ || peek == '"'/* q"{{ ...}}   }}"*/)
+                        if (peek == '{'*/
+/*q{ ... }*//*
+ || peek == '"'*/
+/* q"{{ ...}}   }}"*//*
+)
                         {
                             x = Col - 1;
                             y = Line;
@@ -251,8 +264,10 @@ public class Lexer {
                                 else if (inSuperComment && tokenString.EndsWith("+/")) inSuperComment = false;
                                 if (!inSuperComment)
                                 {
-                                    if (!inNestedComment && tokenString.EndsWith("/*")) inNestedComment = true;
-                                    else if (inNestedComment && tokenString.EndsWith("*/")) inNestedComment = false;
+                                    if (!inNestedComment && tokenString.EndsWith("*/
+/*")) inNestedComment = true;
+                                    else if (inNestedComment && tokenString.EndsWith("*//*
+")) inNestedComment = false;
                                 }
 
                                 if (!inNestedComment && !inSuperComment)
@@ -270,7 +285,9 @@ public class Lexer {
                                 }
                             }
 
-                            return Token(TokenType.Literal, x, y, Col, Line, tokenString, /*tokenString,*/ LiteralFormat.VerbatimStringLiteral);
+                            return Token(TokenType.Literal, x, y, Col, Line, tokenString, */
+/*tokenString,*//*
+ LiteralFormat.VerbatimStringLiteral);
                         }
                     }
 
@@ -336,10 +353,12 @@ public class Lexer {
                         token = ReadDigit(ch, Col - 1);
                     else
                         token = read_operator(ch);
+*/
                     break;
             }
 
             // try error recovery (token = null -> continue with next char)
+/*
             if (token != null)
             {
                 //token.prev = base.curToken;
@@ -351,9 +370,10 @@ public class Lexer {
                 //StopLexing();
                 break;
             }
+*/
         }
 
-        return Token(TokenType.EOF, Col, Line, 0);
+        return new Token(TokenType.EOF, col, line, 0);
     }
 
 
