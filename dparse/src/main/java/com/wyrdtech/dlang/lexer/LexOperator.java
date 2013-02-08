@@ -42,10 +42,10 @@ public class LexOperator {
                 {
                     case '+':
                         in_stream.read();
-                        return new Token(TokenType.Increment, x, y);
+                        return new Token(TokenType.Increment, x, y, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.PlusAssign, x, y);
+                        return new Token(TokenType.PlusAssign, x, y, 2);
                 }
                 return new Token(TokenType.Plus, x, y);
             case '-':
@@ -53,13 +53,13 @@ public class LexOperator {
                 {
                     case '-':
                         in_stream.read();
-                        return new Token(TokenType.Decrement, x, y);
+                        return new Token(TokenType.Decrement, x, y, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.MinusAssign, x, y);
+                        return new Token(TokenType.MinusAssign, x, y, 2);
                     case '>':
                         in_stream.read();
-                        return new Token(TokenType.TildeAssign, x, y);
+                        return new Token(TokenType.TildeAssign, x, y, 2);
                 }
                 return new Token(TokenType.Minus, x, y);
             case '*':

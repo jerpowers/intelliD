@@ -23,7 +23,7 @@ public class Token {
         this.col = col;
         this.line = line;
 
-        this.end_col = col;
+        this.end_col = col+1;
         this.end_line = line;
         this.literalValue = null;
     }
