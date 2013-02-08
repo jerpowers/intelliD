@@ -16,24 +16,24 @@ public class LexOperator {
         int x = start_col;
         int y = start_line;
 
-        int c = in_stream.read();
-        if (c == -1) {
+
+        int next = in_stream.peek();
+        if (next == -1) {
             // end of stream!
             throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of input stream when parsing operator");
         }
 
-        int n = in_stream.peek();
-        if (n == -1) {
-            // end of stream!
-            throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of input stream when parsing operator");
+        // If we have a '.' may be a literal, in which case don't want to consume here
+        if (next == '.') {
+            int tmp = in_stream.peek(2);
+            if (tmp > 0 && Character.isDigit(tmp)) {
+                return LexNumericLiteral.read(in_stream);
+            }
         }
 
-        char cur = (char)c;
-
-        // Parsing decisions are made on the not-yet-consumed next value, to
-        // avoid consuming character after end of literal
-//        char next = (char)n;
-        int next = n;
+        // Everything else we consume the first char, check it and next
+        char cur = (char)in_stream.read();
+        next = in_stream.peek();
 
         switch (cur)
         {
@@ -57,9 +57,11 @@ public class LexOperator {
                     case '=':
                         in_stream.read();
                         return new Token(TokenType.MinusAssign, x, y, 2);
+/*
                     case '>':
                         in_stream.read();
                         return new Token(TokenType.TildeAssign, x, y, 2);
+*/
                 }
                 return new Token(TokenType.Minus, x, y);
             case '*':
@@ -231,17 +233,12 @@ public class LexOperator {
                                 case '>':
                                     in_stream.read();
                                     int q = in_stream.peek();
-                                    if (q != -1)
+                                    if (q != -1 && q == '=')
                                     {
-                                        switch ((char)q)
-                                        {
-                                            case '=':
                                                 in_stream.read();
                                                 return new Token(TokenType.TripleRightShiftAssign, x, y, 4);
-                                        }
-                                        return new Token(TokenType.ShiftRightUnsigned, x, y, 3); // >>>
                                     }
-                                    break;
+                                    return new Token(TokenType.ShiftRightUnsigned, x, y, 3); // >>>
                             }
                         }
                         return new Token(TokenType.ShiftRight, x, y, 2);
@@ -261,15 +258,11 @@ public class LexOperator {
             case ',':
                 return new Token(TokenType.Comma, x, y);
             case '.':
-                // Prevent OverflowException when peek returns -1
-                int tmp = in_stream.peek();
-                if (tmp > 0 && Character.isDigit(tmp))
-                    return LexNumericLiteral.read(in_stream); //('.', col - 1);
-                else if (tmp == (int)'.')
+                if (next == '.')
                 {
                     in_stream.read();
-                    if ((char)in_stream.peek() == '.') // Triple dot
-                    {
+                    int p = in_stream.peek();
+                    if (p != -1 && p == '.') {
                         in_stream.read();
                         return new Token(TokenType.TripleDot, x, y, 3);
                     }

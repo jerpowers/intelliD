@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /**
  *
@@ -86,4 +87,34 @@ public class LexerStreamTest {
         assertEquals(-1, c);
     }
 
+    @Test
+    public void peek() throws Exception {
+
+        Reader in = new StringReader("I see you");
+
+        LexerStream ls = new LexerStream(in);
+
+        assertEquals(1, ls.getLine());
+        assertEquals(1, ls.getCol());
+
+        int c = ls.peek();
+        assertEquals('I', (char)c);
+        assertTrue(1 == ls.getLine() && 1 == ls.getCol());
+
+        c = ls.peek(2);
+        assertEquals(' ', (char)c);
+        assertTrue(1 == ls.getLine() && 1 == ls.getCol());
+
+        c = ls.peek(4);
+        assertEquals('e', (char)c);
+        assertTrue(1 == ls.getLine() && 1 == ls.getCol());
+
+        c = ls.peek(8);
+        assertEquals('o', (char)c);
+        assertTrue(1 == ls.getLine() && 1 == ls.getCol());
+
+        c = ls.read();
+        assertEquals('I', (char)c);
+        assertTrue(1 == ls.getLine() && 2 == ls.getCol());
+    }
 }

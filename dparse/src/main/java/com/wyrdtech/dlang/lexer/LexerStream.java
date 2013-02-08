@@ -77,10 +77,13 @@ public class LexerStream extends LineNumberReader {
      * @return Nth character in stream
      * @throws IOException
      */
-    public int peek(int i) throws IOException {
-        super.mark(i);
+    public int peek(int ahead) throws IOException {
+        super.mark(ahead);
 
-        int c = super.read();
+        int c = -1;
+        for (int i = 0; i < ahead; i++) {
+            c = super.read();
+        }
         super.reset();
 
         return c;
