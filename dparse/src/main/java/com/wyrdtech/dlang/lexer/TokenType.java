@@ -5,6 +5,14 @@ package com.wyrdtech.dlang.lexer;
  */
 public enum TokenType {
 
+    //TODO: comment types as sub-token-types?
+    LineComment,
+    BlockComment,
+    DocComment,
+    DocLineComment,
+    BlockCommentNest,
+    DocCommentNest,
+
     // ----- terminal classes -----
     EOF,
     Identifier,

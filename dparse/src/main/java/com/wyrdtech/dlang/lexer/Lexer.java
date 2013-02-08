@@ -47,17 +47,6 @@ public class Lexer {
     }
 
 
-    private int read() throws IOException {
-        int c = in_stream.read();
-        this.line = in_stream.getLine();
-        this.col = in_stream.getCol();
-        return c;
-    }
-
-    private int peek() throws IOException {
-        return in_stream.peek();
-    }
-
     private void error(int line, int col, String msg) {
         //TODO: capture these
     }
@@ -75,11 +64,15 @@ public class Lexer {
         if (line == 1 && col == 1) hadLineEnd = true; // beginning of document
 
 
+/*
         int c = read();
         while (c != -1) {
+*/
+        int n = in_stream.peek();
+        while (n != -1) {
             Token token;
 
-            switch (c)
+            switch (n)
             {
                 case ' ':
                 case '\t':
@@ -89,40 +82,10 @@ public class Lexer {
                     hadLineEnd = true;
                     continue;
                 case '/':
-                    int next = peek();
+                    int next = in_stream.peek(2);
                     if (next == '/' || next == '*' || next == '+')
                     {
-                        switch (read())
-                        {
-                            case '+':
-/*
-                                if (peek() == '+')// DDoc
-                                    ReadMultiLineComment(Comment.Type.Documentation | Comment.Type.Block, true);
-                                else
-                                    ReadMultiLineComment(Comment.Type.Block, true);
-*/
-                                break;
-                            case '*':
-/*
-                                if (peek() == '*')// DDoc
-                                    ReadMultiLineComment(Comment.Type.Documentation | Comment.Type.Block, false);
-                                else
-                                    ReadMultiLineComment(Comment.Type.Block, false);
-*/
-                                break;
-                            case '/':
-/*
-                                if (peek() == '/')// DDoc
-                                    ReadSingleLineComment(Comment.Type.Documentation | Comment.Type.SingleLine);
-                                else
-                                    ReadSingleLineComment(Comment.Type.SingleLine);
-*/
-                                break;
-                            default:
-                                error(line, col, "Error while reading comment");
-                                break;
-                        }
-                        continue;
+                        token = LexComment.read(in_stream);
                     }
                     else
                     {
