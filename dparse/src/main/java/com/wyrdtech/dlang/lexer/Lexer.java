@@ -108,9 +108,11 @@ public class Lexer {
                 case '`':
                     token = ReadVerbatimString(nextChar);
                     break;
+*/
                 case '"':
-                    token = ReadString(nextChar);
+                    token = LexStringLiteral.read(in_stream);
                     break;
+/*
                 case '\\':
                     // http://digitalmars.com/d/1.0/lex.html#EscapeSequence
                     // - It's actually deprecated, but parse such literals anyway
@@ -316,8 +318,9 @@ public class Lexer {
                         token = ReadDigit(ch, Col - 1);
                     else
                         token = read_operator(ch);
-*/
+
                     break;
+*/
             }
 
             // try error recovery (token = null -> continue with next char)

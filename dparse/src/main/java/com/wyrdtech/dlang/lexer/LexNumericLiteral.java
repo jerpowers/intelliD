@@ -12,18 +12,10 @@ public class LexNumericLiteral {
     // Purely static members for now
     private LexNumericLiteral() {}
 
-    public static Token read(LexerStream in_stream) throws IOException, LexerException {
+    public static Token read(final LexerStream in_stream) throws IOException, LexerException {
         int start_line = in_stream.getLine();
         int start_col = in_stream.getCol();
         int length = 0;
-
-/*
-        int c = in_stream.read();
-        if (c == -1) {
-            // end of stream!
-            throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of input stream when parsing numeric literal");
-        }
-*/
 
         // Parsing decisions are made on the not-yet-consumed next value, to
         // avoid consuming character after end of literal.
@@ -35,8 +27,6 @@ public class LexNumericLiteral {
 
         char next = (char)n;
 
-//        char cur = (char)c;
-//        if (!Character.isDigit(cur) && cur != '.')
         if (!Character.isDigit(next) && next != '.')
         {
             throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Numeric literals can only start with a digit (0-9) or a dot ('.')");
