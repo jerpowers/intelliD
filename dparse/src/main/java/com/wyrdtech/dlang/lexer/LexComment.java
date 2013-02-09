@@ -45,6 +45,7 @@ public class LexComment {
                 sb.append(read_multi_nested(in_stream));
                 break;
             case '*':
+                sb.append((char)in_stream.read());
                 if (in_stream.peek() == '*') {
                     // DDoc
                     sb.append((char)in_stream.read());

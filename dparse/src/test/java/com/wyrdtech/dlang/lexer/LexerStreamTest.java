@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -60,7 +61,11 @@ public class LexerStreamTest {
         assertEquals(2, ls.getLine());
         assertEquals(1, ls.getCol());
 
-        ls.read(); // w
+        c = ls.read();
+        assertEquals('w', (char)c);
+        assertEquals(2, ls.getLine());
+        assertEquals(2, ls.getCol());
+
         ls.read(); // i
         ls.read(); // t
         ls.read(); // h
@@ -116,5 +121,48 @@ public class LexerStreamTest {
         c = ls.read();
         assertEquals('I', (char)c);
         assertTrue(1 == ls.getLine() && 2 == ls.getCol());
+    }
+
+
+    @Test
+    public void readLine() throws Exception {
+
+        Reader in = new StringReader("line1\nline2\n3line\n\nline5");
+
+        LexerStream ls = new LexerStream(in);
+
+        assertEquals(1, ls.getLine());
+        assertEquals(1, ls.getCol());
+
+        assertEquals('l', (char)ls.read());
+        assertEquals(1, ls.getLine());
+        assertEquals(2, ls.getCol());
+
+        assertEquals("ine1", ls.readLine());
+        assertEquals(2, ls.getLine());
+        assertEquals(1, ls.getCol());
+
+        assertEquals("line2", ls.readLine());
+        assertEquals(3, ls.getLine());
+        assertEquals(1, ls.getCol());
+
+        assertEquals('3', (char)ls.read());
+        assertEquals(3, ls.getLine());
+        assertEquals(2, ls.getCol());
+
+        assertEquals("line", ls.readLine());
+        assertEquals(4, ls.getLine());
+        assertEquals(1, ls.getCol());
+
+        assertEquals("", ls.readLine());
+        assertEquals(5, ls.getLine());
+        assertEquals(1, ls.getCol());
+
+        assertEquals("line5", ls.readLine());
+        assertEquals(6, ls.getLine());
+        assertEquals(1, ls.getCol());
+
+        assertNull(ls.readLine());
+        assertEquals(-1, ls.read());
     }
 }

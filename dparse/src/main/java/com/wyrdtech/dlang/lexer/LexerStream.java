@@ -57,6 +57,27 @@ public class LexerStream extends LineNumberReader {
     }
 
     /**
+     * Read the stream up to and including the next line terminator, return
+     * read contents (not including line terminator).
+     *
+     * @return  A String containing the contents of the line, not including
+     *          any line termination characters, or null if the end of the
+     *          stream has been reached
+     *
+     * @throws  IOException
+     *          If an I/O error occurs
+     */
+    @Override
+    public String readLine() throws IOException {
+        String ln = super.readLine();
+
+        line = super.getLineNumber();
+        col = 1;
+
+        return ln;
+    }
+
+    /**
      * Peek at the next character without taking it off the stream.
      * The same as calling peek(1)
      * @return Next character in stream
