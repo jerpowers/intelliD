@@ -1,215 +1,198 @@
 package com.wyrdtech.dlang.lexer;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.io.IOException;
 
 /**
- * No actual tokens, rather reads an escape sequence and returns string
- * representation.
+ * No actual tokens, rather reads an escape sequence and returns an integer
+ * containing the utf code point of the escaped value.
  *
- * TODO: this
+ * TODO: return character codepoint instead (as int)
  */
 public class LexEscape {
 
-    public static String read(final LexerStream in_stream) throws IOException, LexerException
+    public static int read(final LexerStream in_stream) throws IOException, LexerException
     {
-
         int next = in_stream.peek();
         if (next == -1) {
             throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of input stream when inside escape sequence");
         }
+        if (next != '\\') {
+            throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Not an escape sequence");
+        }
 
+        int result; // int instead of 'char' to support higher-value utf-32
 
-        return String.valueOf((char)in_stream.read() + (char)in_stream.read());
-/*
-        String surrogatePair = null;
+        in_stream.read(); // backslash '\' char
 
-
-        int number;
-        char c = (char)next;
-        int curPos = 1;
-        escapeSequenceBuffer[0] = c;
-        switch (c)
+        // Consume next, as char after escape will always lex as part of escape
+        // or result in error
+        int cur = in_stream.read();
+        next = in_stream.peek();
+        switch (cur)
         {
             case '\'':
-                ch = '\'';
+                result = '\'';
                 break;
             case '\"':
-                ch = '\"';
+                result = '\"';
                 break;
             case '?':
-                ch = '?';
-                return "\\?"; // Literal question mark
-            case '\\':
-                ch = '\\';
+                result = '?';
+//                return "\\?"; // Literal question mark
                 break;
-				*/
-/*case '0':
-					ch = '\0';
-					break;*//*
-
+            case '\\':
+                result = '\\';
+                break;
+            case '0':
+                result = '\0';
+                break;
             case 'a':
-                ch = '\a'; // Bell (alert)
+                result = 0x07; // '\a', BEL alert
                 break;
             case 'b':
-                ch = '\b'; // Backspace
+                result = '\b'; // Backspace
                 break;
             case 'f':
-                ch = '\f'; // Formfeed
+                result = '\f'; // Form feed
                 break;
             case 'n':
-                ch = '\n';
+                result = '\n';
                 break;
             case 'r':
-                ch = '\r';
+                result = '\r';
                 break;
             case 't':
-                ch = '\t';
+                result = '\t';
                 break;
             case 'v':
-                ch = '\v'; // Vertical tab
+                result = 0x0B; // '\v', Vertical tab
+                break;
+            case 'x':
+                //TODO: refactor commonality
+                // 8 bit unicode character, read next two chars as hex
+                result = 0;
+                for (int i = 0; i < 2; i++) {
+                    if (next == -1) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of stream");
+                    }
+                    try {
+                        int n = Integer.parseInt(String.valueOf((char)next), 16);
+                        result = (16 * result) + n;
+                    } catch (NumberFormatException e) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Invalid character in literal: "+next, e);
+                    }
+
+                    in_stream.read();
+                    next = in_stream.peek();
+                }
+
                 break;
             case 'u':
-            case 'x':
                 // 16 bit unicode character
-                c = (char)ReaderRead();
-                number = GetHexNumber(c);
-                escapeSequenceBuffer[curPos++] = c;
+                // read next four chars, as 2 bytes of literal
+                result = 0;
+                for (int i = 0; i < 4; i++) {
+                    if (next == -1) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of stream");
+                    }
+                    try {
+                        int n = Integer.parseInt(String.valueOf((char)next), 16);
+                        result = (16 * result) + n;
+                    } catch (NumberFormatException e) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Invalid character in literal: "+next, e);
+                    }
 
-                if (number < 0)
-                {
-                    OnError(Line, Col - 1, String.Format("Invalid char in literal : {0}", c));
+                    in_stream.read();
+                    next = in_stream.peek();
                 }
-                for (int i = 0; i < 3; ++i)
-                {
-                    if (IsHex((char)ReaderPeek()))
-                    {
-                        c = (char)ReaderRead();
-                        int idx = GetHexNumber(c);
-                        escapeSequenceBuffer[curPos++] = c;
-                        number = 16 * number + idx;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                ch = (char)number;
+
                 break;
             case 'U':
                 // 32 bit unicode character
-                number = 0;
-                for (int i = 0; i < 8; ++i)
-                {
-                    if (IsHex((char)ReaderPeek()))
-                    {
-                        c = (char)ReaderRead();
-                        int idx = GetHexNumber(c);
-                        escapeSequenceBuffer[curPos++] = c;
-                        number = 16 * number + idx;
+                // read next eight chars, as 4 bytes of literal
+                result = 0;
+                for (int i = 0; i < 8; i++) {
+                    if (next == -1) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of stream");
                     }
-                    else
-                    {
-                        OnError(Line, Col - 1, String.Format("Invalid char in literal : {0}", (char)ReaderPeek()));
-                        break;
+                    try {
+                        int n = Integer.parseInt(String.valueOf((char)next), 16);
+                        result = (16 * result) + n;
+                    } catch (NumberFormatException e) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Invalid character in literal: "+next, e);
                     }
+
+                    in_stream.read();
+                    next = in_stream.peek();
                 }
-                if (number > 0xffff)
-                {
-                    ch = '\0';
-                    surrogatePair = char.ConvertFromUtf32(number);
-                }
-                else
-                {
-                    ch = (char)number;
-                }
+
                 break;
 
-            // NamedCharacterEntities
             case '&':
-                string charEntity = "";
-
+                // HTML named character entity
+                StringBuilder entity = new StringBuilder();
+                entity.append((char)cur);
                 while (true)
                 {
-                    nextChar = ReaderRead();
-
-                    if (nextChar < 0)
-                    {
-                        OnError(Line, Col - 1, "EOF reached within named char entity");
-                        ch = '\0';
-                        return string.Empty;
+                    if (next == -1) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of stream");
                     }
 
-                    c = (char)nextChar;
-
-                    if (c == ';')
+                    if (next == ';') {
+                        entity.append((char)in_stream.read());
                         break;
-
-                    if (char.IsLetter(c))
-                        charEntity += c;
-                    else
-                    {
-                        OnError(Line, Col - 1, "Unexpected character found in named char entity: " + c);
-                        ch = '\0';
-                        return string.Empty;
                     }
+
+                    if (Character.isLetter(next)) {
+                        entity.append((char)in_stream.read());
+                    } else {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected character found in named entity: "+next);
+                    }
+
+                    next = in_stream.peek();
                 }
 
-                if (string.IsNullOrEmpty(charEntity))
-                {
-                    OnError(Line, Col - 1, "Empty named character entities not allowed");
-                    ch = '\0';
-                    return string.Empty;
+                if (entity.length() < 1) {
+                    throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Empty named character entity encountered");
                 }
 
-                //TODO: Performance improvement
-                //var ret=System.Web.HttpUtility.HtmlDecode("&"+charEntity+";");
+                String val = StringEscapeUtils.unescapeHtml4(entity.toString());
+                result = Character.codePointAt(val, 0);
+                break;
 
-                ch = '#';//ret[0];
-
-                return "&" + charEntity + ";";
             default:
-
-                // Max 3 following octal digits
-                if (IsOct(c))
-                {
-                    // Parse+Convert oct to dec integer
-                    int oct = GetHexNumber(c);
-
-                    for (int i = 0; i < 2; ++i)
-                    {
-                        if (IsOct((char)ReaderPeek()))
-                        {
-                            c = (char)ReaderRead();
-                            escapeSequenceBuffer[curPos++] = c;
-
-                            int idx = GetHexNumber(c);
-                            oct = 8 * oct + idx;
-                        }
-                        else
-                            break;
-                    }
-
-                    // Convert integer to character
-                    if (oct > 0xffff)
-                    {
-                        ch = '\0';
-                        surrogatePair = char.ConvertFromUtf32(oct);
-                    }
-                    else
-                    {
-                        ch = (char)oct;
-                    }
-
+                if (!is_oct(cur)) {
+                    throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unrecognized escape sequence: "+next);
                 }
-                else
-                {
-                    OnError(Line, Col, String.Format("Unexpected escape sequence : {0}", c));
-                    ch = '\0';
+
+                result = Integer.parseInt(String.valueOf((char)cur), 8);
+
+                int cnt = 1;
+                while (is_oct(next) && cnt < 3) {
+                    // maximum of three octal digits
+                    cnt++;
+
+                    try {
+                        int n = Integer.parseInt(String.valueOf((char)next), 8);
+                        result = (8 * result) + n;
+                    } catch (NumberFormatException e) {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Invalid character in octal literal: "+next, e);
+                    }
+
+                    in_stream.read();
+                    next = in_stream.peek();
                 }
                 break;
         }
-        return new String(escapeSequenceBuffer, 0, curPos);
-*/
+
+        return result;
+    }
+
+    private static boolean is_oct(int digit)
+    {
+        return Character.isDigit(digit) && digit != '9' && digit != '8';
     }
 
 }

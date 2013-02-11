@@ -50,7 +50,7 @@ public class LexStringLiteral {
             }
 
             if (next == '\\') {
-                sb.append(LexEscape.read(in_stream));
+                sb.append(Character.toChars(LexEscape.read(in_stream)));
             } else {
                 sb.append((char)in_stream.read());
             }
