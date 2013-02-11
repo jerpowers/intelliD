@@ -3,7 +3,7 @@ package com.wyrdtech.dlang.lexer;
 import java.io.IOException;
 
 /**
- *
+ * TODO: should the enclosing quotes be included in the value?
  */
 public class LexStringLiteral {
 
@@ -55,6 +55,7 @@ public class LexStringLiteral {
                 sb.append((char)in_stream.read());
             }
 
+            next = in_stream.peek();
         }
 
         return new Token(type, start_col, start_line, in_stream.getCol(), in_stream.getLine(), sb.toString());
