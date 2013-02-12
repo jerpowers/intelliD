@@ -1,7 +1,6 @@
 package com.wyrdtech.dlang.lexer;
 
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.io.Reader;
 
 /**
@@ -83,90 +82,45 @@ public class Lexer {
                     continue;
                 case '/':
                     int next = in_stream.peek(2);
-                    if (next == '/' || next == '*' || next == '+')
-                    {
+                    if (next == '/' || next == '*' || next == '+') {
                         token = LexComment.read(in_stream);
                     }
-                    else
-                    {
+                    else {
                         token = LexOperator.read(in_stream); // '/'
                     }
                     break;
                 case 'r':
-/*
-                    peek = peek();
-                    if (peek == '"')
-                    {
-                        read();
-                        token = ReadVerbatimString(peek);
+                    if (in_stream.peek(2) == '"') {
+                        token = LexStringLiteral.read(in_stream);
                         break;
                     }
-                    else
-                    goto default;
-*/
-/*
+                    // else default
+                case 'x':
+                    if (in_stream.peek(2) == '"') {
+                        token = LexHexLiteral.read(in_stream);
+                        break;
+                    }
+                    // else default
                 case '`':
-                    token = ReadVerbatimString(nextChar);
-                    break;
-*/
                 case '"':
                     token = LexStringLiteral.read(in_stream);
                     break;
-/*
                 case '\\':
-                    // http://digitalmars.com/d/1.0/lex.html#EscapeSequence
-                    // - It's actually deprecated, but parse such literals anyway
-                    String surr = "";
-                    x = Col - 1;
-                    y = Line;
-                    var lit = ReadEscapeSequence(out ch, out surr);
-                    token = Token(TokenType.Literal, x, y, lit.Length + 1, lit*/
-/*, ch.ToString()*//*
-, LiteralFormat.StringLiteral);
-                    token.RawCodeRepresentation = ch.ToString();
-                    OnError(y, x, "Escape sequence strings are deprecated!");
-                    break;
+                    throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Escape sequence strings are deprecated");
                 case '\'':
-                    token = ReadChar();
+                    token = LexCharLiteral.read(in_stream);
                     break;
                 case '@':
-                    token = Token(TokenType.At, Col-1, Line, 1);
+                    token = new Token(TokenType.At, in_stream.getLine(), in_stream.getCol(), 1);
+                    in_stream.read();
                     break;
                 default:
-                    ch = (char)nextChar;
 
-                    if (ch == 'x')
+/*
+                    if (ch == 'q') // Token strings
                     {
                         peek = peek();
-                        if (peek == '"') // HexString
-                        {
-                            read(); // Skip the "
-
-                            String numString = "";
-
-                            while ((next = read()) != -1)
-                            {
-                                ch = (char)next;
-
-                                if (is_hex(ch))
-                                    numString += ch;
-                                else if (!Char.IsWhiteSpace(ch))
-                                    break;
-                            }
-
-                            return Token(TokenType.Literal, Col - 1, Line, numString.Length + 1, ParseFloatValue(numString, 16), */
-/*numString,*//*
- LiteralFormat.Scalar);
-                        }
-                    }
-                    else if (ch == 'q') // Token strings
-                    {
-                        peek = peek();
-                        if (peek == '{'*/
-/*q{ ... }*//*
- || peek == '"'*/
-/* q"{{ ...}}   }}"*//*
-)
+                        if (peek == '{' || peek == '"') //q{ ... } || q"{{ ...}}   }}"
                         {
                             x = Col - 1;
                             y = Line;
@@ -229,10 +183,7 @@ public class Lexer {
                                 else if (inSuperComment && tokenString.EndsWith("+/")) inSuperComment = false;
                                 if (!inSuperComment)
                                 {
-                                    if (!inNestedComment && tokenString.EndsWith("*/
-/*")) inNestedComment = true;
-                                    else if (inNestedComment && tokenString.EndsWith("*//*
-")) inNestedComment = false;
+                                    if (!inNestedComment && tokenString.EndsWith("")) inNestedComment = false;
                                 }
 
                                 if (!inNestedComment && !inSuperComment)
@@ -250,12 +201,12 @@ public class Lexer {
                                 }
                             }
 
-                            return Token(TokenType.Literal, x, y, Col, Line, tokenString, */
-/*tokenString,*//*
- LiteralFormat.VerbatimStringLiteral);
+                            return Token(TokenType.Literal, x, y, Col, Line, tokenString, LiteralFormat.VerbatimStringLiteral);
                         }
                     }
+*/
 
+/*
                     if (Char.IsLetter(ch) || ch == '_' || ch == '\\')
                     {
                         x = Col - 1; // Col was incremented above, but we want the start of the identifier
@@ -319,8 +270,9 @@ public class Lexer {
                     else
                         token = read_operator(ch);
 
-                    break;
 */
+                    break;
+
             }
 
             // try error recovery (token = null -> continue with next char)
@@ -339,7 +291,7 @@ public class Lexer {
 */
         }
 
-        return new Token(TokenType.EOF, col, line, 0);
+        return new Token(TokenType.EOF, line, col, 0);
     }
 
 

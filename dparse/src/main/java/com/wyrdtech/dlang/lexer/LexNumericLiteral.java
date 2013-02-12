@@ -5,7 +5,6 @@ import java.io.IOException;
 /**
  * Encapsulates logic for lexing out a numerical literal from an input stream.
  *
- * TODO: lexer exception?
  */
 public class LexNumericLiteral {
 
@@ -131,11 +130,17 @@ public class LexNumericLiteral {
 
                 // '.' was after literal, but we already consumed it so tokenize
                 if (next == '.') {
-                    next_token = new Token(TokenType.DoubleDot,  in_stream.getCol(), in_stream.getLine(), 2);
+                    next_token = new Token(TokenType.DoubleDot,
+                                           in_stream.getLine(),
+                                           in_stream.getCol(),
+                                           2);
                     in_stream.read();  // eat up the second dot
                 }
                 else if (is_identifier_part(next)) {
-                    next_token = new Token(TokenType.Dot, in_stream.getCol(), in_stream.getLine(), 1);
+                    next_token = new Token(TokenType.Dot,
+                                           in_stream.getLine(),
+                                           in_stream.getCol(),
+                                           1);
                 }
 
             }
@@ -281,8 +286,7 @@ public class LexNumericLiteral {
 
         // Create token
         Token token = new Token(TokenType.Literal,
-                                start_col,
-                                start_line,
+                                start_line, start_col,
                                 length,
                                 value);
         token.next = next_token;

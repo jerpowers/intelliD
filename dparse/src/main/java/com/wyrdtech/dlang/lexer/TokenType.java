@@ -18,9 +18,12 @@ public enum TokenType {
     Identifier,
     Literal,
 
+    LiteralChar,
+
     LiteralUtf8,
     LiteralUtf16,
     LiteralUtf32,
+    LiteralHex,
 
     // ----- special character -----
     Assign,

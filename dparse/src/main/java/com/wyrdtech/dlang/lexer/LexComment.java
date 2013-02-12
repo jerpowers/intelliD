@@ -75,7 +75,12 @@ public class LexComment {
                 throw new LexerException(start_line, start_col, "Error while reading comment");
         }
 
-        return new Token(type, start_col, start_line, in_stream.getCol(), in_stream.getLine(), sb.toString());
+        return new Token(type,
+                         start_line,
+                         start_col,
+                         in_stream.getLine(),
+                         in_stream.getCol(),
+                         sb.toString());
 
     }
 
