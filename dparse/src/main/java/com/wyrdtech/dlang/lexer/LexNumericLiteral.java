@@ -103,6 +103,7 @@ public class LexNumericLiteral {
 
         // Check for '.' and read rest of num if present, or tokenize
         // as itself or '..' as appropriate
+        // TODO: don't consume/tokenize dots here if not part of number
         Token next_token = null;
         if (next == '.') {
             char cur = (char)in_stream.read(); // '.'

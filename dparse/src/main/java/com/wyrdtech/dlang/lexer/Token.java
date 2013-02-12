@@ -20,11 +20,11 @@ public class Token {
 
     public Token(TokenType type, int line, int col) {
         this.type = type;
-        this.col = col;
         this.line = line;
+        this.col = col;
 
-        this.end_col = col+1;
         this.end_line = line;
+        this.end_col = col+1;
         this.literalValue = null;
     }
 
@@ -32,8 +32,8 @@ public class Token {
     public Token(TokenType type, int line, int col, int length)
     {
         this.type = type;
-        this.col = col;
         this.line = line;
+        this.col = col;
         this.end_col = col + length;
 
         this.end_line = line;
@@ -47,8 +47,8 @@ public class Token {
                  Object literalValue)
     {
         this.type = type;
-        this.col = col;
         this.line = line;
+        this.col = col;
         this.end_col = col + length;
         this.literalValue = literalValue;
 
@@ -58,14 +58,15 @@ public class Token {
     public Token(TokenType type,
                  int line,
                  int col,
-                 int end_line, int end_col,
+                 int end_line,
+                 int end_col,
                  Object literalValue)
     {
         this.type = type;
-        this.col = col;
         this.line = line;
-        this.end_col = end_col;
+        this.col = col;
         this.end_line = end_line;
+        this.end_col = end_col;
         this.literalValue = literalValue;
     }
 
