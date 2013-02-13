@@ -1,6 +1,5 @@
 package com.wyrdtech.dlang.lexer;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -89,7 +88,7 @@ public class LexDelimitedString {
             end_delim = start_delim;
         }
         else {
-            end_delim = String.valueOf(valid_close(start_delim.charAt(0)));
+            end_delim = String.valueOf((char)valid_close(start_delim.charAt(0)));
         }
 
 
@@ -166,7 +165,7 @@ public class LexDelimitedString {
             next = in_stream.peek();
         }
 
-        return new Token(TokenType.Literal, start_line, start_col, in_stream.getLine(), in_stream.getCol(), result.toString());
+        return new Token(TokenType.LiteralUtf8, start_line, start_col, in_stream.getLine(), in_stream.getCol(), result.toString());
     }
 /*
 
