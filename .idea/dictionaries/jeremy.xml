@@ -2,6 +2,7 @@
   <dictionary name="jeremy">
     <words>
       <w>lexing</w>
+      <w>tokenization</w>
     </words>
   </dictionary>
 </component>

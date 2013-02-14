@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/descent/descent.iml" filepath="$PROJECT_DIR$/descent/descent.iml" />
       <module fileurl="file://$PROJECT_DIR$/dlang/dlang.iml" filepath="$PROJECT_DIR$/dlang/dlang.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dparse/dparse.iml" filepath="$PROJECT_DIR$/dparse/dparse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/parsed/parsed.iml" filepath="$PROJECT_DIR$/parsed/parsed.iml" />
     </modules>
   </component>
 </project>
