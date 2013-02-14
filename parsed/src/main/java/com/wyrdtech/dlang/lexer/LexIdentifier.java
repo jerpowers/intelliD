@@ -16,18 +16,14 @@ public class LexIdentifier {
         if (next == -1) {
             throw new LexerException(start_line, start_col, "Unexpected end of input stream when parsing identifier");
         }
-
         if (!Character.isLetter(next) && next != '_') {
-            throw new LexerException(start_line, start_col, "Not an identifier");
+            throw new LexerException(start_line, start_col, "Invalid character for start of identifier: "+(char)next);
         }
 
 
         StringBuilder sb = new StringBuilder();
 
-        while (next != -1 && !Character.isWhitespace(next)) {
-            if (!Character.isLetterOrDigit(next) && next != '_') {
-                throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Invalid character in identifier");
-            }
+        while (valid_ident_char(next)) {
             sb.append(Character.toChars(in_stream.read()));
             next = in_stream.peek();
         }
@@ -49,4 +45,13 @@ public class LexIdentifier {
         return new Token(type, start_line, start_col, in_stream.getLine(), in_stream.getCol(), result);
     }
 
+    private static boolean valid_ident_char(int c) {
+        if (c == -1) {
+            return false;
+        }
+        if (c == '_') {
+            return true;
+        }
+        return Character.isLetterOrDigit(c);
+    }
 }

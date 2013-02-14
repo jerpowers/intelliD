@@ -28,11 +28,6 @@ public class Lexer {
         // TODO: Ignore any first-line '#!'
     }
 
-
-    private void error(int line, int col, String msg) {
-        //TODO: this, instead of exceptions?
-    }
-
     public Token next() throws IOException, LexerException
     {
         return next(this.in_stream);
@@ -42,17 +37,18 @@ public class Lexer {
     {
         int n = in_stream.peek();
 
-        // End of stream
-        if (n == -1) {
-            return new Token(TokenType.EOF, in_stream.getLine(), in_stream.getCol(), 0);
-        }
-
         while (Character.isWhitespace(n)) {
             in_stream.read();
             n = in_stream.peek();
         }
 
-        Token token = null;
+        // End of stream
+        if (n == -1) {
+            return new Token(TokenType.EOF, in_stream.getLine(), in_stream.getCol(), 0);
+        }
+
+
+        Token token;
 
         switch (n)
         {

@@ -184,4 +184,32 @@ public class LexIdentifierTest {
         assertEquals(1, tok.end_line);
         assertEquals(13, tok.end_col);
     }
+
+    @Test
+    public void dotted() throws Exception {
+        String str = "foo.bar";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        Token tok = LexIdentifier.read(ls);
+
+        assertEquals(TokenType.Identifier, tok.type);
+        assertEquals("foo", tok.literalValue);
+        assertEquals(1, tok.line);
+        assertEquals(1, tok.col);
+        assertEquals(1, tok.end_line);
+        assertEquals(4, tok.end_col);
+
+        ls.read();
+        tok = LexIdentifier.read(ls);
+
+        assertEquals(TokenType.Identifier, tok.type);
+        assertEquals("bar", tok.literalValue);
+        assertEquals(1, tok.line);
+        assertEquals(5, tok.col);
+        assertEquals(1, tok.end_line);
+        assertEquals(8, tok.end_col);
+
+    }
+
 }

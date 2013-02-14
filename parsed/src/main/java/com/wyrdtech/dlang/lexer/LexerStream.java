@@ -111,8 +111,16 @@ public class LexerStream extends LineNumberReader {
     }
 
     @Override
-    public int read(char[] cbuf, int off, int len) {
-        throw new UnsupportedOperationException("Multi-char read not supported");
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        int cnt = super.read(cbuf, off, len);
+        if (super.getLineNumber() != line) {
+            //TODO: check '\n' instead?
+            col = 1;
+            line = super.getLineNumber(); // should be line+1
+        } else if (cnt >= 0) {
+            col+=cnt;
+        }
+        return cnt;
     }
 
     @Override
