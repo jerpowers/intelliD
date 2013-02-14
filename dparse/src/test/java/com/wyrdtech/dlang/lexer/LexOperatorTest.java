@@ -45,7 +45,7 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Assign, tok.type);
-        assertNull(tok.literalValue);
+        assertEquals("=", tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -63,7 +63,7 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Equal, tok.type);
-        assertNull(tok.literalValue);
+        assertEquals("==", tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -75,7 +75,7 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.NotEqual, tok.type);
-        assertNull(tok.literalValue);
+        assertEquals("!=", tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(6, tok.col);
         assertEquals(1, tok.end_line);
@@ -93,7 +93,7 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.LessThan, tok.type);
-        assertNull(tok.literalValue);
+        assertEquals("<", tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(3, tok.end_col);
@@ -103,7 +103,7 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.GreaterThan, tok.type);
-        assertNull(tok.literalValue);
+        assertEquals(">", tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(4, tok.col);
         assertEquals(5, tok.end_col);
@@ -113,7 +113,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.LessEqual, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(6, tok.col);
         assertEquals(8, tok.end_col);
@@ -123,7 +122,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.GreaterEqual, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(9, tok.col);
         assertEquals(11, tok.end_col);
@@ -133,7 +131,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.LessOrGreater, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(12, tok.col);
         assertEquals(14, tok.end_col);
@@ -143,7 +140,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.LessEqualOrGreater, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(15, tok.col);
         assertEquals(18, tok.end_col);
@@ -158,7 +154,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Plus, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(1, tok.col);
         assertEquals(1, tok.end_line);
@@ -170,7 +165,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Increment, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(4, tok.col);
         assertEquals(1, tok.end_line);
@@ -181,7 +175,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.PlusAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(7, tok.col);
         assertEquals(1, tok.end_line);
@@ -203,7 +196,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.MinusAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -214,7 +206,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Decrement, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(5, tok.col);
         assertEquals(1, tok.end_line);
@@ -225,7 +216,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Minus, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(8, tok.col);
         assertEquals(1, tok.end_line);
@@ -247,7 +237,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.TimesAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(3, tok.col);
         assertEquals(1, tok.end_line);
@@ -258,7 +247,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Times, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(6, tok.col);
         assertEquals(1, tok.end_line);
@@ -268,7 +256,6 @@ public class LexOperatorTest {
 
         tok = LexOperator.read(ls);
         assertEquals(TokenType.Semicolon, tok.type);
-        assertNull(tok.literalValue);
 
         assertEquals(-1, ls.read());
     }
@@ -284,7 +271,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.DivAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -295,7 +281,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Div, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(5, tok.col);
         assertEquals(1, tok.end_line);
@@ -305,7 +290,6 @@ public class LexOperatorTest {
 
         tok = LexOperator.read(ls);
         assertEquals(TokenType.Semicolon, tok.type);
-        assertNull(tok.literalValue);
 
         assertEquals(-1, ls.read());
     }
@@ -321,7 +305,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.ModAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -332,7 +315,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Mod, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(5, tok.col);
         assertEquals(1, tok.end_line);
@@ -342,7 +324,6 @@ public class LexOperatorTest {
 
         tok = LexOperator.read(ls);
         assertEquals(TokenType.Semicolon, tok.type);
-        assertNull(tok.literalValue);
 
         assertEquals(-1, ls.read());
     }
@@ -358,7 +339,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.BitwiseAndAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -369,7 +349,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.BitwiseOr, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(5, tok.col);
         assertEquals(1, tok.end_line);
@@ -380,7 +359,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.BitwiseOrAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(7, tok.col);
         assertEquals(1, tok.end_line);
@@ -391,7 +369,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.BitwiseAnd, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(10, tok.col);
         assertEquals(1, tok.end_line);
@@ -402,7 +379,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.XorAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(12, tok.col);
         assertEquals(1, tok.end_line);
@@ -413,7 +389,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Xor, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(15, tok.col);
         assertEquals(1, tok.end_line);
@@ -423,7 +398,6 @@ public class LexOperatorTest {
 
         tok = LexOperator.read(ls);
         assertEquals(TokenType.Semicolon, tok.type);
-        assertNull(tok.literalValue);
 
         assertEquals(-1, ls.read());
 
@@ -440,7 +414,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.LogicalAnd, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -452,7 +425,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.LogicalOr, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(6, tok.col);
         assertEquals(1, tok.end_line);
@@ -461,7 +433,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Not, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(8, tok.col);
         assertEquals(1, tok.end_line);
@@ -471,7 +442,6 @@ public class LexOperatorTest {
 
         tok = LexOperator.read(ls);
         assertEquals(TokenType.Semicolon, tok.type);
-        assertNull(tok.literalValue);
     }
 
     @Test
@@ -485,7 +455,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.PowAssign, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(2, tok.col);
         assertEquals(1, tok.end_line);
@@ -496,7 +465,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Pow, tok.type);
-        assertNull(tok.literalValue);
         assertEquals(1, tok.line);
         assertEquals(6, tok.col);
         assertEquals(1, tok.end_line);
@@ -506,7 +474,6 @@ public class LexOperatorTest {
 
         tok = LexOperator.read(ls);
         assertEquals(TokenType.Semicolon, tok.type);
-        assertNull(tok.literalValue);
     }
 
     @Test
@@ -521,7 +488,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.UnorderedGreaterOrEqual, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(3, tok.col);
         assertEquals(5, tok.end_col);
@@ -533,7 +499,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.UnorderedOrEqual, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(8, tok.col);
         assertEquals(11, tok.end_col);
@@ -545,7 +510,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Unordered, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(14, tok.col);
         assertEquals(18, tok.end_col);
@@ -557,7 +521,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.UnorderedOrGreater, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(21, tok.col);
         assertEquals(24, tok.end_col);
@@ -569,7 +532,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.UnorderedLessOrEqual, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(27, tok.col);
         assertEquals(29, tok.end_col);
@@ -581,7 +543,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.UnorderedOrLess, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(32, tok.col);
         assertEquals(35, tok.end_col);
@@ -598,7 +559,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.TildeAssign, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(4, tok.end_col);
@@ -608,7 +568,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Tilde, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(5, tok.col);
         assertEquals(6, tok.end_col);
@@ -625,7 +584,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.GoesTo, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(4, tok.end_col);
@@ -642,7 +600,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.ShiftLeft, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(4, tok.end_col);
@@ -652,7 +609,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.ShiftRight, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(5, tok.col);
         assertEquals(7, tok.end_col);
@@ -662,7 +618,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.ShiftLeftAssign, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(8, tok.col);
         assertEquals(11, tok.end_col);
@@ -672,7 +627,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.ShiftRightAssign, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(12, tok.col);
         assertEquals(15, tok.end_col);
@@ -689,7 +643,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.TripleRightShiftAssign, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(6, tok.end_col);
@@ -699,7 +652,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.ShiftRightUnsigned, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(7, tok.col);
         assertEquals(10, tok.end_col);
@@ -717,7 +669,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Question, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(3, tok.end_col);
@@ -727,7 +678,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Colon, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(4, tok.col);
         assertEquals(5, tok.end_col);
@@ -737,7 +687,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Dollar, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(6, tok.col);
         assertEquals(7, tok.end_col);
@@ -755,7 +704,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Dot, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(3, tok.end_col);
@@ -783,7 +731,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.DoubleDot, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(2, tok.col);
         assertEquals(4, tok.end_col);
@@ -793,7 +740,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.TripleDot, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(5, tok.col);
         assertEquals(8, tok.end_col);
@@ -803,7 +749,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.Comma, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(9, tok.col);
         assertEquals(10, tok.end_col);
@@ -818,7 +763,6 @@ public class LexOperatorTest {
         Token tok = LexOperator.read(ls);
 
         assertEquals(TokenType.OpenParenthesis, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(1, tok.col);
         assertEquals(2, tok.end_col);
@@ -828,7 +772,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.CloseParenthesis, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(3, tok.col);
         assertEquals(4, tok.end_col);
@@ -836,7 +779,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.OpenSquareBracket, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(4, tok.col);
         assertEquals(5, tok.end_col);
@@ -846,7 +788,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.CloseSquareBracket, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(6, tok.col);
         assertEquals(7, tok.end_col);
@@ -854,7 +795,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.OpenCurlyBrace, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(7, tok.col);
         assertEquals(8, tok.end_col);
@@ -864,7 +804,6 @@ public class LexOperatorTest {
         tok = LexOperator.read(ls);
 
         assertEquals(TokenType.CloseCurlyBrace, tok.type);
-        assertNull(tok.literalValue);
         assertTrue(tok.line == 1 && tok.end_line == 1);
         assertEquals(9, tok.col);
         assertEquals(10, tok.end_col);

@@ -167,43 +167,6 @@ public class LexDelimitedString {
 
         return new Token(TokenType.LiteralUtf8, start_line, start_col, in_stream.getLine(), in_stream.getCol(), result.toString());
     }
-/*
-
-                            // Read tokens
-                            bool inSuperComment = false,
-                                    inNestedComment = false;
-
-                            while ((next = read()) != -1)
-                            {
-                                ch = (char)next;
-
-                                tokenString += ch;
-
-                                // comments are treated as part of the string inside of tokenized string. curly braces inside the comments are ignored. WEIRD!
-                                if (!inSuperComment && tokenString.EndsWith("/+")) inSuperComment = true;
-                                else if (inSuperComment && tokenString.EndsWith("+/")) inSuperComment = false;
-                                if (!inSuperComment)
-                                {
-                                    if (!inNestedComment && tokenString.EndsWith("")) inNestedComment = false;
-                                }
-
-                                if (!inNestedComment && !inSuperComment)
-                                {
-                                    if (!IsQuoted && ch == '{')
-                                        BracketLevel++;
-                                    if (!IsQuoted && ch == '}')
-                                        BracketLevel--;
-                                }
-
-                                if (tokenString.EndsWith(endDelim) && (IsQuoted || BracketLevel < 1))
-                                {
-                                    tokenString = tokenString.Remove(tokenString.Length - endDelim.Length);
-                                    break;
-                                }
-                            }
-
-                            return Token(TokenType.Literal, x, y, Col, Line, tokenString, LiteralFormat.VerbatimStringLiteral);
-*/
 
 
     private static boolean is_valid_open(int c) {

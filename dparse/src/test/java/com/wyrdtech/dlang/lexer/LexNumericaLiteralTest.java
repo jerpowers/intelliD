@@ -67,7 +67,8 @@ public class LexNumericaLiteralTest {
         assertEquals(1, tok.end_line);
         assertEquals(2, tok.end_col);
 
-        assertEquals(TokenType.DoubleDot, tok.next.type);
+        assertEquals('.', ls.read());
+        assertEquals('.', ls.read());
 
         tok = LexNumericLiteral.read(ls);
 
@@ -136,7 +137,7 @@ public class LexNumericaLiteralTest {
         assertEquals(14, tok.end_col);
 
         // Shouldn't have consumed last dot
-        assertNull(tok.next);
+        assertEquals('.', ls.read());
     }
 
     @Test

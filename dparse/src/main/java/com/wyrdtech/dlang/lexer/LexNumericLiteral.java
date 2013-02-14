@@ -14,7 +14,6 @@ public class LexNumericLiteral {
     public static Token read(final LexerStream in_stream) throws IOException, LexerException {
         int start_line = in_stream.getLine();
         int start_col = in_stream.getCol();
-        int length = 0;
 
         // Parsing decisions are made on the not-yet-consumed next value, to
         // avoid consuming character after end of literal.
@@ -44,7 +43,7 @@ public class LexNumericLiteral {
         boolean is_unsigned = false;
         boolean is_imaginary = false;
 
-        boolean allow_suffix = true;
+//        boolean allow_suffix = true;
 
         String prefix = "";
         String suffix = "";
@@ -59,8 +58,6 @@ public class LexNumericLiteral {
         if (next == '0')
         {
             sb.append((char)in_stream.read());
-            length++;
-
             next = (char)in_stream.peek();
 
             if (next == 'x' || next == 'X') // Hex values
@@ -69,9 +66,7 @@ public class LexNumericLiteral {
                 base = 16;
 
                 sb.setLength(0); // Remove '0' from the string value
-
                 in_stream.read(); // skip 'x'
-                length++;
 
                 next = (char)in_stream.peek();
             }
@@ -81,9 +76,7 @@ public class LexNumericLiteral {
                 base = 2;
 
                 sb.setLength(0); // Remove '0' from the string value
-
                 in_stream.read(); // skip 'b'
-                length++;
 
                 next = (char)in_stream.peek();
             }
@@ -93,55 +86,35 @@ public class LexNumericLiteral {
         // Read literal into string builder
         while (is_legal_digit(next, base)) {
             char cur = (char)in_stream.read(); // consume, same char as 'next'
-            length++;
-
             if (cur != '_') {
                 sb.append(cur);
             }
             next = (char)in_stream.peek();
         }
 
-        // Check for '.' and read rest of num if present, or tokenize
-        // as itself or '..' as appropriate
-        // TODO: don't consume/tokenize dots here if not part of number
-        Token next_token = null;
+        // Check for '.' and read rest of num if present.  Leave
+        // dot on the stream if not part of number.
+        //TODO: Spec says "123." is a valid float literal
         if (next == '.') {
-            char cur = (char)in_stream.read(); // '.'
-            length++;
-
-            next = (char)in_stream.peek();
-
+            next = (char)in_stream.peek(2);
             if (is_legal_digit(next, base)) {
                 is_float = true;
 
-                sb.append(cur);
-                do {
-                    cur = (char)in_stream.read(); // consume, same char as 'next'
-                    length++;
+                sb.append((char)in_stream.read()); // dot
 
-                    if (cur != '_') {
-                        sb.append(cur);
+                char c = (char)in_stream.read(); // after dot
+                if (c != '_') {
+                    sb.append(c);
+                }
+
+                next = (char)in_stream.peek();
+                while (is_legal_digit(next, base)) {
+                    c = (char)in_stream.read();
+                    if (next != '_') {
+                        sb.append(c);
                     }
                     next = (char)in_stream.peek();
-                } while (is_legal_digit(next, base));
-            }
-            else {
-                allow_suffix = false;
-                length--; // part of next token
 
-                // '.' was after literal, but we already consumed it so tokenize
-                if (next == '.') {
-                    next_token = new Token(TokenType.DoubleDot,
-                                           in_stream.getLine(),
-                                           in_stream.getCol(),
-                                           2);
-                    in_stream.read();  // eat up the second dot
-                }
-                else if (is_identifier_part(next)) {
-                    next_token = new Token(TokenType.Dot,
-                                           in_stream.getLine(),
-                                           in_stream.getCol(),
-                                           1);
                 }
 
             }
@@ -157,20 +130,17 @@ public class LexNumericLiteral {
             exp.append(next);
 
             in_stream.read();
-            length++;
 
             next = (char)in_stream.peek();
 
             if (next == '-' || next == '+') {
                 exp.append(next);
                 in_stream.read();
-                length++;
             }
 
             next = (char)in_stream.peek();
             while (is_legal_digit(next, 10)) { // always in decimal notation
                 char cur = (char)in_stream.read();
-                length++;
                 if (cur != '_') {
                     exp.append(cur);
                 }
@@ -185,70 +155,64 @@ public class LexNumericLiteral {
             next = (char)in_stream.peek();
         }
 
-        // Suffixes
-        if (allow_suffix) {
 
-            // 'L' is valid for both float and integer
-            if (next == 'L') {
-                is_long = true;
+        // Check for suffixes
+
+        // 'L' is valid for both float and integer
+        if (next == 'L') {
+            is_long = true;
 //                subFmt |= LiteralSubformat.Long;
 
-                suffix += next;
+            suffix += next;
 
-                in_stream.read();
-                length++;
-                next = (char)in_stream.peek();
-            }
+            in_stream.read();
+            next = (char)in_stream.peek();
+        }
 
-            // Check for float tag, mutually exclusive with 'L'
-            if ((next == 'f' || next == 'F') && !is_long) {
-                is_float = true;
+        // Check for float tag, mutually exclusive with 'L'
+        if ((next == 'f' || next == 'F') && !is_long) {
+            is_float = true;
 
-                suffix += next;
+            suffix += next;
 
-                in_stream.read();
-                length++;
-                next = (char)in_stream.peek();
-            }
+            in_stream.read();
+            next = (char)in_stream.peek();
+        }
 
-            // Check for unsigned, only valid of not a float
-            if ((next == 'u' || next == 'U') && !is_float) {
-                is_unsigned = true;
+        // Check for unsigned, only valid if not a float
+        if ((next == 'u' || next == 'U') && !is_float) {
+            is_unsigned = true;
 //                subFmt |= LiteralSubformat.Unsigned;
 
-                suffix += next;
+            suffix += next;
 
-                in_stream.read();
-                length++;
-                next = (char)in_stream.peek();
-            }
+            in_stream.read();
+            next = (char)in_stream.peek();
+        }
 
-            // Check for trailing 'L'
-            if (next == 'L'  && !is_long && !is_float) {
-                is_long = true;
+        // Check for trailing 'L'
+        if (next == 'L'  && !is_long && !is_float) {
+            is_long = true;
 //                subFmt |= LiteralSubformat.Long;
 
-                suffix += next;
+            suffix += next;
 
-                in_stream.read();
-                length++;
-                next = (char)in_stream.peek();
-            }
+            in_stream.read();
+            next = (char)in_stream.peek();
+        }
 
-            // imaginary suffix, must be after all others
-            if (next == 'i' && !is_unsigned) {
-                is_float = true;
-                is_imaginary = true;
+        // imaginary suffix, must be after all others
+        if (next == 'i' && !is_unsigned) {
+            is_float = true;
+            is_imaginary = true;
 //                subFmt |= LiteralSubformat.Imaginary;
 
-                suffix += next;
+            suffix += next;
 
-                in_stream.read();
-                length++;
-                next = (char)in_stream.peek();
-            }
-
+            in_stream.read();
+            next = (char)in_stream.peek();
         }
+
 
         // Determine actual value
         Object value;
@@ -287,10 +251,11 @@ public class LexNumericLiteral {
 
         // Create token
         Token token = new Token(TokenType.Literal,
-                                start_line, start_col,
-                                length,
+                                start_line,
+                                start_col,
+                                in_stream.getLine(),
+                                in_stream.getCol(),
                                 value);
-        token.next = next_token;
 
         return token;
 
@@ -350,41 +315,6 @@ public class LexNumericLiteral {
     private static boolean is_bin(char digit)
     {
         return digit == '0' || digit == '1';
-    }
-
-
-    // exponent markers count too
-    private static boolean is_identifier_part(int ch)
-    {
-        if (Character.isLetterOrDigit(ch)) {
-            return true;
-        }
-        if (ch == '_') {
-            return true;
-        }
-
-/*
-        switch(ch)
-        {
-            case ' ':
-            case '@':
-            case '/':
-            case '(':
-            case ')':
-            case '[':
-            case ']':
-            case '{':
-            case '}':
-            case '=':
-            case '\"':
-            case '\'':
-            case -1:
-                return false;
-            default:
-                return char.IsLetterOrDigit((char)ch); // accept unicode letters
-        }
-*/
-        return false;
     }
 
 }
