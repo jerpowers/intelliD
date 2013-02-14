@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="com.wyrdtech.dlang.lexer.LexEscapeTest" tests="4" failures="0" errors="0" timestamp="2013-02-14T21:53:12" hostname="jeremy" time="0.014">
+  <properties/>
+  <testcase name="escape" classname="com.wyrdtech.dlang.lexer.LexEscapeTest" time="0.0"/>
+  <testcase name="hex" classname="com.wyrdtech.dlang.lexer.LexEscapeTest" time="0.0"/>
+  <testcase name="oct" classname="com.wyrdtech.dlang.lexer.LexEscapeTest" time="0.0"/>
+  <testcase name="html" classname="com.wyrdtech.dlang.lexer.LexEscapeTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

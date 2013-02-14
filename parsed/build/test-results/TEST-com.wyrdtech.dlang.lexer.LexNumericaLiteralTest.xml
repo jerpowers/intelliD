@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" tests="9" failures="0" errors="0" timestamp="2013-02-14T21:53:12" hostname="jeremy" time="0.003">
+  <properties/>
+  <testcase name="float_dot" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <testcase name="float_exp" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <testcase name="float_neg_exp" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <testcase name="hex_float" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <testcase name="integer_dots" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.001"/>
+  <testcase name="ulong" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <testcase name="hex_int" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <testcase name="integer" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <testcase name="float_suffix" classname="com.wyrdtech.dlang.lexer.LexNumericaLiteralTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,11 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="com.wyrdtech.dlang.lexer.LexCommentTest" tests="5" failures="0" errors="0" timestamp="2013-02-14T21:53:12" hostname="jeremy" time="0.002">
+  <properties/>
+  <testcase name="block_inline" classname="com.wyrdtech.dlang.lexer.LexCommentTest" time="0.001"/>
+  <testcase name="line" classname="com.wyrdtech.dlang.lexer.LexCommentTest" time="0.0"/>
+  <testcase name="nest" classname="com.wyrdtech.dlang.lexer.LexCommentTest" time="0.001"/>
+  <testcase name="block" classname="com.wyrdtech.dlang.lexer.LexCommentTest" time="0.0"/>
+  <testcase name="nest_inline" classname="com.wyrdtech.dlang.lexer.LexCommentTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

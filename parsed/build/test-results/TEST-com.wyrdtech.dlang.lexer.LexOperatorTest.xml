@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="com.wyrdtech.dlang.lexer.LexOperatorTest" tests="21" failures="0" errors="0" timestamp="2013-02-14T21:53:12" hostname="jeremy" time="0.01">
+  <properties/>
+  <testcase name="assign" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="eleven" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="not_op" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="u_shift" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="bitwise" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="add" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="div" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="dot" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.002"/>
+  <testcase name="mod" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="mul" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="pow" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="sub" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="tri" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.001"/>
+  <testcase name="paren" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="range" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="shift" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="tilde" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="inequality" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="logical" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="unordered" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <testcase name="equality" classname="com.wyrdtech.dlang.lexer.LexOperatorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
