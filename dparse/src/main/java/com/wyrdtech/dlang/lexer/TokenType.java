@@ -135,7 +135,7 @@ public enum TokenType {
     Float("float"),
     For("for"),
     Foreach("foreach"),
-    Foreach_Reverse("foreach_revers"),
+    Foreach_Reverse("foreach_reverse"),
     Function("function"),
 
     Goto("goto"),
@@ -218,6 +218,7 @@ public enum TokenType {
     __gshared("__gshared"),
     __traits("__traits"),
     __vector("__vector"),
+    __parameters("__parameters"),
 
     // Meta tokens
 /*

@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.io.StringReader;
 
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
 
 /**
  *
