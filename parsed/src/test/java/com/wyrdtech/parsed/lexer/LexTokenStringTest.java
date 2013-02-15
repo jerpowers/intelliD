@@ -1,4 +1,4 @@
-package com.wyrdtech.dlang.lexer;
+package com.wyrdtech.parsed.lexer;
 
 import junit.framework.Assert;
 import org.junit.Test;
@@ -10,56 +10,39 @@ import static junit.framework.Assert.assertTrue;
 /**
  *
  */
-public class LexDelimitedStringTest {
+public class LexTokenStringTest {
 
     @Test
-    public void bracketed() throws Exception {
-        String str = "q\"{foo][}f}\"bar";
+    public void simple() throws Exception {
+        String str = "q{foo}";
 
         LexerStream ls = new LexerStream(new StringReader(str));
 
-        Token tok = LexDelimitedString.read(ls);
+        Token tok = LexTokenString.read(ls);
         Assert.assertEquals(TokenType.LiteralUtf8, tok.type);
         assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals("foo][}f", tok.literalValue);
+        Assert.assertEquals("foo", tok.literalValue);
         Assert.assertEquals(1, tok.line);
         Assert.assertEquals(1, tok.col);
         Assert.assertEquals(1, tok.end_line);
-        Assert.assertEquals(13, tok.end_col);
+        Assert.assertEquals(7, tok.end_col);
 
     }
 
     @Test
-    public void parens() throws Exception {
-        String str = "q\"((f/*)*/)\"";
+    public void nested() throws Exception {
+        String str = "q{/*}*/ q{foo}; }";
 
         LexerStream ls = new LexerStream(new StringReader(str));
 
-        Token tok = LexDelimitedString.read(ls);
+        Token tok = LexTokenString.read(ls);
         Assert.assertEquals(TokenType.LiteralUtf8, tok.type);
         assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals("(f/*)*/", tok.literalValue);
+//        Assert.assertEquals("/*}*/ q{foo}; ", tok.literalValue);
         Assert.assertEquals(1, tok.line);
         Assert.assertEquals(1, tok.col);
         Assert.assertEquals(1, tok.end_line);
-        Assert.assertEquals(13, tok.end_col);
-
-    }
-
-    @Test
-    public void identifier() throws Exception {
-        String str = "q\"END\nsome\nmultiline\nstring\nEND\" ";
-
-        LexerStream ls = new LexerStream(new StringReader(str));
-
-        Token tok = LexDelimitedString.read(ls);
-        Assert.assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals("some\nmultiline\nstring\n", tok.literalValue);
-        Assert.assertEquals(1, tok.line);
-        Assert.assertEquals(1, tok.col);
-        Assert.assertEquals(5, tok.end_line);
-        Assert.assertEquals(5, tok.end_col);
+        Assert.assertEquals(18, tok.end_col);
 
     }
 
@@ -68,7 +51,7 @@ public class LexDelimitedStringTest {
         String str = "";
         LexerStream ls = new LexerStream(new StringReader(str));
 
-        LexDelimitedString.read(ls);
+        LexTokenString.read(ls);
     }
 
     @Test(expected = LexerException.class)
@@ -76,7 +59,7 @@ public class LexDelimitedStringTest {
         String str = "q[]";
         LexerStream ls = new LexerStream(new StringReader(str));
 
-        LexDelimitedString.read(ls);
+        LexTokenString.read(ls);
     }
 
     @Test(expected = LexerException.class)
@@ -84,15 +67,15 @@ public class LexDelimitedStringTest {
         String str = "\"q{}\"";
         LexerStream ls = new LexerStream(new StringReader(str));
 
-        LexDelimitedString.read(ls);
+        LexTokenString.read(ls);
     }
 
     @Test(expected = LexerException.class)
     public void unterminated() throws Exception {
-        String str = "q\"{lalala}";
+        String str = "q{lalala";
         LexerStream ls = new LexerStream(new StringReader(str));
 
-        LexDelimitedString.read(ls);
+        LexTokenString.read(ls);
     }
 
 }

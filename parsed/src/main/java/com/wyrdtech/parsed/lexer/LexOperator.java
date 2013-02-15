@@ -1,4 +1,4 @@
-package com.wyrdtech.dlang.lexer;
+package com.wyrdtech.parsed.lexer;
 
 import java.io.IOException;
 

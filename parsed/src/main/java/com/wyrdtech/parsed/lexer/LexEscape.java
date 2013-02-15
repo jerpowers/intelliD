@@ -1,4 +1,4 @@
-package com.wyrdtech.dlang.lexer;
+package com.wyrdtech.parsed.lexer;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
