@@ -4,8 +4,6 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import descent.internal.compiler.parser.TOK;
-
 import com.wyrdtech.d.intellid.DLanguage;
 
 /**

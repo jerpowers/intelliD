@@ -10,7 +10,7 @@
     </content>
     <orderEntry type="jdk" jdkName="IDEA IU-12" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="descent" />
+    <orderEntry type="module" module-name="parsed" />
   </component>
 </module>
 

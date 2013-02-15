@@ -3,17 +3,28 @@ package com.wyrdtech.d.intellid.lexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.lexer.LexerPosition;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.text.CharSequenceReader;
+import com.wyrdtech.parsed.lexer.LexerException;
+import com.wyrdtech.parsed.lexer.LexerStream;
+import com.wyrdtech.parsed.lexer.Token;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+
 /**
- * Lexer for D, wrapper for the Descent lexer.
+ * IntelliJ Lexer for D, wrapper for the ParseD lexer.
  */
 public class DLexer extends Lexer {
 
-    private CharSequence buffer; // what is being lexed
-    private int endOffset;       // last position in buffer to lex
+    private CharSequence buffer;
+    private LexerStream in_stream; // buffer wrapper
 
-    private descent.internal.compiler.parser.Lexer lexer; // actual lexer
+    private int start_offset;
+    private int end_offset;
+    private int cur_offset;
+
+    private com.wyrdtech.parsed.lexer.Lexer lexer; // actual lexer
+    private com.wyrdtech.parsed.lexer.Token token; // current token
 
 
     public DLexer() { }
@@ -22,19 +33,14 @@ public class DLexer extends Lexer {
     @Override
     public void start(final CharSequence buffer, final int startOffset, final int endOffset, final int initialState) {
         this.buffer = buffer;
-        this.endOffset = endOffset;
+        this.start_offset = startOffset;
+        this.end_offset = endOffset;
+        this.cur_offset = start_offset;
 
-        //TODO: modify/update Decent to use CharSequence, initial state
-        this.lexer = new descent.internal.compiler.parser.Lexer(buffer.toString().toCharArray(),
-                                                                startOffset,
-                                                                (endOffset - startOffset),
-                                                                true,
-                                                                true,
-                                                                false,
-                                                                false,
-                                                                descent.internal.compiler.parser.Parser.D2);
+        this.in_stream = new LexerStream(new CharSequenceReader(buffer.subSequence(startOffset, endOffset)));
+        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(in_stream);
 
-
+        this.token = null;
     }
 
     @Override
@@ -46,36 +52,47 @@ public class DLexer extends Lexer {
     @Nullable
     @Override
     public IElementType getTokenType() {
-        if (lexer.token == null) {
-            return null;
-        }
-        return DTokenType.valueOf(lexer.token);
+        return DTokenType.valueOf(token);
     }
 
     @Override
     public int getTokenStart() {
-        return lexer.token.ptr;
+        if (token == null) {
+            return start_offset;
+        }
+        return start_offset + token.start_index;
     }
 
     @Override
     public int getTokenEnd() {
-        return lexer.token.ptr + lexer.token.len;
+        if (token == null) {
+            return start_offset;
+        }
+        return start_offset + token.end_index;
     }
 
     @Override
     public void advance() {
-        lexer.nextToken();
+        try {
+            token = lexer.next();
+            cur_offset = start_offset + in_stream.getPosition();
+        } catch (IOException e) {
+            // TODO: log/throw
+        } catch (LexerException e) {
+            // TODO: log/throw
+        }
     }
 
     @Override
     public LexerPosition getCurrentPosition() {
-        return new Position(lexer.p, getState());
+        return new Position(cur_offset, getState());
     }
 
     @Override
     public void restore(final LexerPosition position) {
-        int new_len = this.endOffset - position.getOffset();
-        lexer.reset(position.getOffset(), new_len);
+
+        this.in_stream = new LexerStream(new CharSequenceReader(buffer.subSequence(position.getOffset(), end_offset)));
+        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(in_stream);
     }
 
     @Override
@@ -85,7 +102,7 @@ public class DLexer extends Lexer {
 
     @Override
     public int getBufferEnd() {
-        return this.endOffset;
+        return this.end_offset;
     }
 
 

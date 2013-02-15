@@ -15,7 +15,7 @@ public class DHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new com.wyrdtech.d.lexer.DHighlightingLexer();
+        return new com.wyrdtech.d.intellid.lexer.DHighlightingLexer();
     }
 
     @NotNull
