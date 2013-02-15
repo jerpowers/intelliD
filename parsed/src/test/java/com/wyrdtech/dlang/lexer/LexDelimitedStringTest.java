@@ -62,4 +62,37 @@ public class LexDelimitedStringTest {
         Assert.assertEquals(5, tok.end_col);
 
     }
+
+    @Test(expected = LexerException.class)
+    public void empty() throws Exception {
+        String str = "";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexDelimitedString.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void not() throws Exception {
+        String str = "q[]";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexDelimitedString.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void also_not() throws Exception {
+        String str = "\"q{}\"";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexDelimitedString.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void unterminated() throws Exception {
+        String str = "q\"{lalala}";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexDelimitedString.read(ls);
+    }
+
 }

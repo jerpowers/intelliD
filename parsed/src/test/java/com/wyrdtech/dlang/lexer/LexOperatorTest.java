@@ -809,4 +809,32 @@ public class LexOperatorTest {
         assertEquals(10, tok.end_col);
     }
 
+    @Test
+    public void hash() throws Exception {
+        String str = "##";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        Token tok = LexOperator.read(ls);
+
+        assertEquals(TokenType.Hash, tok.type);
+        assertTrue(tok.line == 1 && tok.end_line == 1);
+        assertEquals(1, tok.col);
+        assertEquals(2, tok.end_col);
+
+        tok = LexOperator.read(ls);
+
+        assertEquals(TokenType.Hash, tok.type);
+        assertTrue(tok.line == 1 && tok.end_line == 1);
+        assertEquals(2, tok.col);
+        assertEquals(3, tok.end_col);
+    }
+
+    @Test(expected = LexerException.class)
+    public void empty() throws Exception {
+        String str = "";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexOperator.read(ls);
+    }
 }

@@ -228,6 +228,7 @@ public class LexNumericLiteral {
 
 
         //TODO: register out-of-bounds errors
+        //TODO: honour imaginary numbers properly
         if (is_float) {
             try {
                 if (base == 16) {

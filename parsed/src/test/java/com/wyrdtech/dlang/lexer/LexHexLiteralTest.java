@@ -59,4 +59,38 @@ public class LexHexLiteralTest {
         Assert.assertEquals(23, tok.end_col);
 
     }
+
+
+    @Test(expected = LexerException.class)
+    public void empty() throws Exception {
+        String str = "";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexHexLiteral.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void not() throws Exception {
+        String str = "hex string";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexHexLiteral.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void also_not() throws Exception {
+        String str = "x00AB";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexHexLiteral.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void unterminated() throws Exception {
+        String str = "x\"AB CD";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexHexLiteral.read(ls);
+    }
+
 }

@@ -212,4 +212,29 @@ public class LexIdentifierTest {
 
     }
 
+    @Test(expected = LexerException.class)
+    public void reserved() throws Exception {
+        // Reserved identifier not in keyword list
+        String str = "__FOO__";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexIdentifier.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void empty() throws Exception {
+        String str = "";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexIdentifier.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void not() throws Exception {
+        String str = "9d";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexIdentifier.read(ls);
+    }
+
 }

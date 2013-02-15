@@ -104,6 +104,40 @@ public class LexNumericaLiteralTest {
     }
 
     @Test
+    public void bin_int() throws Exception {
+        String str = "0b0101";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        Token tok = LexNumericLiteral.read(ls);
+
+        assertEquals(TokenType.Literal, tok.type);
+        assertTrue(tok.literalValue instanceof Long);
+        assertEquals(Long.parseLong("0101", 2), tok.literalValue);
+        assertEquals(1, tok.line);
+        assertEquals(1, tok.col);
+        assertEquals(1, tok.end_line);
+        assertEquals(7, tok.end_col);
+    }
+
+    @Test
+    public void int_long() throws Exception {
+        String str = "987654321L";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        Token tok = LexNumericLiteral.read(ls);
+
+        assertEquals(TokenType.Literal, tok.type);
+        assertTrue(tok.literalValue instanceof Long);
+        assertEquals(987654321L, tok.literalValue);
+        assertEquals(1, tok.line);
+        assertEquals(1, tok.col);
+        assertEquals(1, tok.end_line);
+        assertEquals(11, tok.end_col);
+    }
+
+    @Test
     public void ulong() throws Exception {
         String str = "867_5309uL";
 
@@ -208,6 +242,23 @@ public class LexNumericaLiteralTest {
     }
 
     @Test
+    public void imaginary() throws Exception {
+        String str = "2i";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        Token tok = LexNumericLiteral.read(ls);
+
+        assertEquals(TokenType.Literal, tok.type);
+        assertTrue(tok.literalValue instanceof Double);
+        assertEquals(Double.valueOf("2"), tok.literalValue);
+        assertEquals(1, tok.line);
+        assertEquals(1, tok.col);
+        assertEquals(1, tok.end_line);
+        assertEquals(3, tok.end_col);
+    }
+
+    @Test
     public void hex_float() throws Exception {
         String str = "0x1.beefp3";
 
@@ -223,4 +274,34 @@ public class LexNumericaLiteralTest {
         assertEquals(1, tok.end_line);
         assertEquals(11, tok.end_col);
     }
+
+    @Test
+    public void max_int() throws Exception {
+        String str = String.valueOf(Long.MAX_VALUE) + "0";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        Token tok = LexNumericLiteral.read(ls);
+
+        assertEquals(TokenType.Literal, tok.type);
+        assertTrue(tok.literalValue instanceof Long);
+        assertEquals(Long.MAX_VALUE, tok.literalValue);
+    }
+
+    @Test(expected = LexerException.class)
+    public void empty() throws Exception {
+        String str = "";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexNumericLiteral.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void not() throws Exception {
+        String str = "nine";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexNumericLiteral.read(ls);
+    }
+
 }

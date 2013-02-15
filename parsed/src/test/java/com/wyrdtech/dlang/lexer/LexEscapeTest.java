@@ -24,6 +24,7 @@ public class LexEscapeTest {
                      "\\r" +  // \r
                      "\\t" +  // \t
                      "\\v" +  // \v
+                     "\\0" +  // \0
                      "";
 
         LexerStream ls = new LexerStream(new StringReader(str));
@@ -39,6 +40,7 @@ public class LexEscapeTest {
         assertEquals('\r', (char)LexEscape.read(ls));
         assertEquals('\t', (char)LexEscape.read(ls));
         assertEquals(0x0B, LexEscape.read(ls));
+        assertEquals(0x00, LexEscape.read(ls));
     }
 
 
@@ -79,6 +81,30 @@ public class LexEscapeTest {
         assertEquals(255, LexEscape.read(ls));
         ls.read();
         assertEquals(8869, LexEscape.read(ls));
+    }
+
+    @Test(expected = LexerException.class)
+    public void empty() throws Exception {
+        String str = "";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexEscape.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void not() throws Exception {
+        String str = "escape";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexEscape.read(ls);
+    }
+
+    @Test(expected = LexerException.class)
+    public void unknown() throws Exception {
+        String str = "\\z";
+        LexerStream ls = new LexerStream(new StringReader(str));
+
+        LexEscape.read(ls);
     }
 
 }

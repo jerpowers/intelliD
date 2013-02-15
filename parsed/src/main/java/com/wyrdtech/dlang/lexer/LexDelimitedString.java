@@ -94,12 +94,6 @@ public class LexDelimitedString {
 
         StringBuilder result = new StringBuilder();
 
-
-/*
-        Deque<String> nesting = new ArrayDeque<String>();
-        boolean in_comment = false;
-*/
-
         while (next != -1) {
 
             //TODO: This.  Tokenize, but preserve original for string
@@ -154,15 +148,16 @@ public class LexDelimitedString {
                     break;
                     //TODO:
                     // check for end of token string (!is_quoted implies is tokens)
-                    // technically everything should be valid tokens inside,
-                    // but laziness means only check for nesting
-
                 }
             }
 
             // not the end
             result.append(Character.toChars(in_stream.read()));
             next = in_stream.peek();
+        }
+
+        if (next == -1) {
+            throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Unexpected end of stream in delimited string literal");
         }
 
         return new Token(TokenType.LiteralUtf8, start_line, start_col, in_stream.getLine(), in_stream.getCol(), result.toString());
@@ -192,24 +187,4 @@ public class LexDelimitedString {
         return open;
     }
 
-/*
-    private static boolean is_valid_close(int c, char open) {
-        if (c == -1) {
-            return false;
-        }
-        if (c== ']' && open == '[') {
-            return true;
-        }
-        if (c== ')' && open == '(') {
-            return true;
-        }
-        if (c== '>' && open == '<') {
-            return true;
-        }
-        if (c== '}' && open == '{') {
-            return true;
-        }
-        return false;
-    }
-*/
 }
