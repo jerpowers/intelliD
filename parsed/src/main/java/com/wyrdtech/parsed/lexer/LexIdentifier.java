@@ -9,6 +9,7 @@ public class LexIdentifier {
 
     public static Token read(final LexerStream in_stream) throws IOException, LexerException
     {
+        int start_index = in_stream.getPosition();
         int start_line = in_stream.getLine();
         int start_col = in_stream.getCol();
 
@@ -42,7 +43,14 @@ public class LexIdentifier {
         }
 
 
-        return new Token(type, start_line, start_col, in_stream.getLine(), in_stream.getCol(), result);
+        return new Token(type,
+                         start_index,
+                         start_line,
+                         start_col,
+                         in_stream.getPosition(),
+                         in_stream.getLine(),
+                         in_stream.getCol(),
+                         result);
     }
 
     private static boolean valid_ident_char(int c) {

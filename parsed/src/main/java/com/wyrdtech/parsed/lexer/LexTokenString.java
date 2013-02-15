@@ -15,6 +15,7 @@ public class LexTokenString {
 
     public static Token read(final LexerStream in_stream) throws IOException, LexerException
     {
+        int start_index = in_stream.getPosition();
         int start_line = in_stream.getLine();
         int start_col = in_stream.getCol();
 
@@ -61,7 +62,14 @@ public class LexTokenString {
             throw new LexerException(start_line, start_col, "Unexpected end of stream when parsing token string literal");
         }
 
-        return new Token(TokenType.LiteralUtf8, start_line, start_col, in_stream.getLine(), in_stream.getCol(), result.toString());
+        return new Token(TokenType.LiteralUtf8,
+                         start_index,
+                         start_line,
+                         start_col,
+                         in_stream.getPosition(),
+                         in_stream.getLine(),
+                         in_stream.getCol(),
+                         result.toString());
     }
 
 }

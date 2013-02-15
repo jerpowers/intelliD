@@ -15,12 +15,14 @@ public class LexerStream extends LineNumberReader {
 
     private int line;
     private int col;
+    private int index;
 
     public LexerStream(Reader in_stream) {
         super(in_stream);
         super.setLineNumber(1);
         this.line = 1;
         this.col = 1;
+        this.index = 0;
     }
 
     /**
@@ -38,6 +40,14 @@ public class LexerStream extends LineNumberReader {
     }
 
     /**
+     * @return Absolute index of how many characters have been read from the
+     * stream, starting at 0.
+     */
+    public int getPosition() {
+        return this.index;
+    }
+
+    /**
      * Pull the next character off the stream and return it.
      * Will keep track of current line and column in the stream.
      * @return Next character in stream
@@ -46,6 +56,10 @@ public class LexerStream extends LineNumberReader {
     @Override
     public int read() throws IOException {
         int c = super.read();
+        if (c != -1) {
+            index++;
+        }
+
         if (super.getLineNumber() != line) {
             //TODO: check '\n' instead?
             col = 1;
@@ -70,6 +84,9 @@ public class LexerStream extends LineNumberReader {
     @Override
     public String readLine() throws IOException {
         String ln = super.readLine();
+        if (ln != null) {
+            index += ln.length();
+        }
 
         line = super.getLineNumber();
         col = 1;
@@ -113,6 +130,10 @@ public class LexerStream extends LineNumberReader {
     @Override
     public int read(char[] cbuf, int off, int len) throws IOException {
         int cnt = super.read(cbuf, off, len);
+        if (cnt > 0) {
+            index += cnt;
+        }
+
         if (super.getLineNumber() != line) {
             //TODO: check '\n' instead?
             col = 1;

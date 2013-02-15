@@ -14,6 +14,7 @@ public class LexHexLiteral {
     public static Token read(final LexerStream in_stream)
     throws IOException, LexerException
     {
+        int start_index = in_stream.getPosition();
         int start_line = in_stream.getLine();
         int start_col = in_stream.getCol();
 
@@ -63,8 +64,10 @@ public class LexHexLiteral {
         }
 
         return new Token(TokenType.LiteralHex,
+                         start_index,
                          start_line,
                          start_col,
+                         in_stream.getPosition(),
                          in_stream.getLine(),
                          in_stream.getCol(),
                          result.toString());

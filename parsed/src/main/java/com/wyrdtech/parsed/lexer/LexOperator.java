@@ -9,7 +9,9 @@ public class LexOperator {
 
     private LexOperator() {}
 
-    public static Token read(LexerStream in_stream) throws IOException, LexerException {
+    public static Token read(LexerStream in_stream) throws IOException, LexerException
+    {
+        int index = in_stream.getPosition();
         int line = in_stream.getLine();
         int col = in_stream.getCol();
 
@@ -38,93 +40,93 @@ public class LexOperator {
                 {
                     case '+':
                         in_stream.read();
-                        return new Token(TokenType.Increment, line, col, 2);
+                        return new Token(TokenType.Increment, index, line, col, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.PlusAssign, line, col, 2);
+                        return new Token(TokenType.PlusAssign, index, line, col, 2);
                 }
-                return new Token(TokenType.Plus, line, col);
+                return new Token(TokenType.Plus, index, line, col);
             case '-':
                 switch (next)
                 {
                     case '-':
                         in_stream.read();
-                        return new Token(TokenType.Decrement, line, col, 2);
+                        return new Token(TokenType.Decrement, index, line, col, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.MinusAssign, line, col, 2);
+                        return new Token(TokenType.MinusAssign, index, line, col, 2);
                 }
-                return new Token(TokenType.Minus, line, col);
+                return new Token(TokenType.Minus, index, line, col);
             case '*':
                 switch (next)
                 {
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.TimesAssign, line, col, 2);
+                        return new Token(TokenType.TimesAssign, index, line, col, 2);
                     default:
                         break;
                 }
-                return new Token(TokenType.Times, line, col);
+                return new Token(TokenType.Times, index, line, col);
             case '/':
                 switch (next)
                 {
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.DivAssign, line, col, 2);
+                        return new Token(TokenType.DivAssign, index, line, col, 2);
                 }
-                return new Token(TokenType.Div, line, col);
+                return new Token(TokenType.Div, index, line, col);
             case '%':
                 switch (next)
                 {
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.ModAssign, line, col, 2);
+                        return new Token(TokenType.ModAssign, index, line, col, 2);
                 }
-                return new Token(TokenType.Mod, line, col);
+                return new Token(TokenType.Mod, index, line, col);
             case '&':
                 switch (next)
                 {
                     case '&':
                         in_stream.read();
-                        return new Token(TokenType.LogicalAnd, line, col, 2);
+                        return new Token(TokenType.LogicalAnd, index, line, col, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.BitwiseAndAssign, line, col, 2);
+                        return new Token(TokenType.BitwiseAndAssign, index, line, col, 2);
                 }
-                return new Token(TokenType.BitwiseAnd, line, col);
+                return new Token(TokenType.BitwiseAnd, index, line, col);
             case '|':
                 switch (next)
                 {
                     case '|':
                         in_stream.read();
-                        return new Token(TokenType.LogicalOr, line, col, 2);
+                        return new Token(TokenType.LogicalOr, index, line, col, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.BitwiseOrAssign, line, col, 2);
+                        return new Token(TokenType.BitwiseOrAssign, index, line, col, 2);
                 }
-                return new Token(TokenType.BitwiseOr, line, col);
+                return new Token(TokenType.BitwiseOr, index, line, col);
             case '^':
                 switch (next)
                 {
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.XorAssign, line, col, 2);
+                        return new Token(TokenType.XorAssign, index, line, col, 2);
                     case '^':
                         in_stream.read();
                         if (in_stream.peek() == '=')
                         {
                             in_stream.read();
-                            return new Token(TokenType.PowAssign, line, col, 3);
+                            return new Token(TokenType.PowAssign, index, line, col, 3);
                         }
-                        return new Token(TokenType.Pow, line, col, 2);
+                        return new Token(TokenType.Pow, index, line, col, 2);
                 }
-                return new Token(TokenType.Xor, line, col);
+                return new Token(TokenType.Xor, index, line, col);
             case '!':
                 switch (next)
                 {
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.NotEqual, line, col, 2); // !=
+                        return new Token(TokenType.NotEqual, index, line, col, 2); // !=
 
                     case '<':
                         in_stream.read();
@@ -132,18 +134,18 @@ public class LexOperator {
                         {
                             case '=':
                                 in_stream.read();
-                                return new Token(TokenType.UnorderedOrGreater, line, col, 3); // !<=
+                                return new Token(TokenType.UnorderedOrGreater, index, line, col, 3); // !<=
                             case '>':
                                 in_stream.read();
                                 switch (in_stream.peek())
                                 {
                                     case '=':
                                         in_stream.read();
-                                        return new Token(TokenType.Unordered, line, col, 4); // !<>=
+                                        return new Token(TokenType.Unordered, index, line, col, 4); // !<>=
                                 }
-                                return new Token(TokenType.UnorderedOrEqual, line, col, 3); // !<>
+                                return new Token(TokenType.UnorderedOrEqual, index, line, col, 3); // !<>
                         }
-                        return new Token(TokenType.UnorderedGreaterOrEqual, line, col, 2); // !<
+                        return new Token(TokenType.UnorderedGreaterOrEqual, index, line, col, 2); // !<
 
                     case '>':
                         in_stream.read();
@@ -151,33 +153,33 @@ public class LexOperator {
                         {
                             case '=':
                                 in_stream.read();
-                                return new Token(TokenType.UnorderedOrLess, line, col, 3); // !>=
+                                return new Token(TokenType.UnorderedOrLess, index, line, col, 3); // !>=
                             default:
                                 break;
                         }
-                        return new Token(TokenType.UnorderedLessOrEqual, line, col, 2); // !>
+                        return new Token(TokenType.UnorderedLessOrEqual, index, line, col, 2); // !>
 
                 }
-                return new Token(TokenType.Not, line, col);
+                return new Token(TokenType.Not, index, line, col);
             case '~':
                 switch (next)
                 {
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.TildeAssign, line, col, 2);
+                        return new Token(TokenType.TildeAssign, index, line, col, 2);
                 }
-                return new Token(TokenType.Tilde, line, col);
+                return new Token(TokenType.Tilde, index, line, col);
             case '=':
                 switch (next)
                 {
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.Equal, line, col, 2);
+                        return new Token(TokenType.Equal, index, line, col, 2);
                     case '>':
                         in_stream.read();
-                        return new Token(TokenType.GoesTo, line, col, 2);
+                        return new Token(TokenType.GoesTo, index, line, col, 2);
                 }
-                return new Token(TokenType.Assign, line, col);
+                return new Token(TokenType.Assign, index, line, col);
             case '<':
                 switch (next)
                 {
@@ -187,27 +189,27 @@ public class LexOperator {
                         {
                             case '=':
                                 in_stream.read();
-                                return new Token(TokenType.ShiftLeftAssign, line, col, 3);
+                                return new Token(TokenType.ShiftLeftAssign, index, line, col, 3);
                             default:
                                 break;
                         }
-                        return new Token(TokenType.ShiftLeft, line, col, 2);
+                        return new Token(TokenType.ShiftLeft, index, line, col, 2);
                     case '>':
                         in_stream.read();
                         switch (in_stream.peek())
                         {
                             case '=':
                                 in_stream.read();
-                                return new Token(TokenType.LessEqualOrGreater, line, col, 3);
+                                return new Token(TokenType.LessEqualOrGreater, index, line, col, 3);
                             default:
                                 break;
                         }
-                        return new Token(TokenType.LessOrGreater, line, col, 2);
+                        return new Token(TokenType.LessOrGreater, index, line, col, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.LessEqual, line, col, 2);
+                        return new Token(TokenType.LessEqual, index, line, col, 2);
                 }
-                return new Token(TokenType.LessThan, line, col);
+                return new Token(TokenType.LessThan, index, line, col);
             case '>':
                 switch (next)
                 {
@@ -220,34 +222,34 @@ public class LexOperator {
                             {
                                 case '=':
                                     in_stream.read();
-                                    return new Token(TokenType.ShiftRightAssign, line, col, 3);
+                                    return new Token(TokenType.ShiftRightAssign, index, line, col, 3);
                                 case '>':
                                     in_stream.read();
                                     int q = in_stream.peek();
                                     if (q != -1 && q == '=')
                                     {
                                         in_stream.read();
-                                        return new Token(TokenType.TripleRightShiftAssign, line, col, 4);
+                                        return new Token(TokenType.TripleRightShiftAssign, index, line, col, 4);
                                     }
-                                    return new Token(TokenType.ShiftRightUnsigned, line, col, 3); // >>>
+                                    return new Token(TokenType.ShiftRightUnsigned, index, line, col, 3); // >>>
                             }
                         }
-                        return new Token(TokenType.ShiftRight, line, col, 2);
+                        return new Token(TokenType.ShiftRight, index, line, col, 2);
                     case '=':
                         in_stream.read();
-                        return new Token(TokenType.GreaterEqual, line, col, 2);
+                        return new Token(TokenType.GreaterEqual, index, line, col, 2);
                 }
-                return new Token(TokenType.GreaterThan, line, col);
+                return new Token(TokenType.GreaterThan, index, line, col);
             case '?':
-                return new Token(TokenType.Question, line, col);
+                return new Token(TokenType.Question, index, line, col);
             case '$':
-                return new Token(TokenType.Dollar, line, col);
+                return new Token(TokenType.Dollar, index, line, col);
             case ';':
-                return new Token(TokenType.Semicolon, line, col);
+                return new Token(TokenType.Semicolon, index, line, col);
             case ':':
-                return new Token(TokenType.Colon, line, col);
+                return new Token(TokenType.Colon, index, line, col);
             case ',':
-                return new Token(TokenType.Comma, line, col);
+                return new Token(TokenType.Comma, index, line, col);
             case '.':
                 if (next == '.')
                 {
@@ -255,25 +257,25 @@ public class LexOperator {
                     int p = in_stream.peek();
                     if (p != -1 && p == '.') {
                         in_stream.read();
-                        return new Token(TokenType.TripleDot, line, col, 3);
+                        return new Token(TokenType.TripleDot, index, line, col, 3);
                     }
-                    return new Token(TokenType.DoubleDot, line, col, 2);
+                    return new Token(TokenType.DoubleDot, index, line, col, 2);
                 }
-                return new Token(TokenType.Dot, line, col);
+                return new Token(TokenType.Dot, index, line, col);
             case ')':
-                return new Token(TokenType.CloseParenthesis, line, col);
+                return new Token(TokenType.CloseParenthesis, index, line, col);
             case '(':
-                return new Token(TokenType.OpenParenthesis, line, col);
+                return new Token(TokenType.OpenParenthesis, index, line, col);
             case ']':
-                return new Token(TokenType.CloseSquareBracket, line, col);
+                return new Token(TokenType.CloseSquareBracket, index, line, col);
             case '[':
-                return new Token(TokenType.OpenSquareBracket, line, col);
+                return new Token(TokenType.OpenSquareBracket, index, line, col);
             case '}':
-                return new Token(TokenType.CloseCurlyBrace, line, col);
+                return new Token(TokenType.CloseCurlyBrace, index, line, col);
             case '{':
-                return new Token(TokenType.OpenCurlyBrace, line, col);
+                return new Token(TokenType.OpenCurlyBrace, index, line, col);
             case '#':
-                return new Token(TokenType.Hash, line, col);
+                return new Token(TokenType.Hash, index, line, col);
             default:
                 return null;
         }

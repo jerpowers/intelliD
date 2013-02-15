@@ -15,6 +15,9 @@ public class Token {
     public final int end_col;
     public final int end_line;
 
+    public final int start_index;
+    public final int end_index;
+
     public final Object literalValue;
 
     /**
@@ -25,11 +28,13 @@ public class Token {
      * @param line Line token appears on in stream
      * @param col  Column token appears on in stream
      */
-    public Token(TokenType type, int line, int col) {
+    public Token(TokenType type, int index, int line, int col) {
         this.type = type;
+        this.start_index = index;
         this.line = line;
         this.col = col;
 
+        this.end_index = index+1;
         this.end_line = line;
         this.end_col = col+1;
         this.literalValue = type.value;
@@ -45,9 +50,11 @@ public class Token {
      * @param col  Column token appears on in stream
      * @param length Number of characters in the token
      */
-    public Token(TokenType type, int line, int col, int length)
+    public Token(TokenType type, int index, int line, int col, int length)
     {
         this.type = type;
+        this.start_index = index;
+        this.end_index = index+length;
         this.line = line;
         this.col = col;
         this.end_col = col + length;
@@ -69,12 +76,15 @@ public class Token {
      *              representing contents; for numeric literals, numeric value.
      */
     public Token(TokenType type,
+                 int index,
                  int line,
                  int col,
                  int length,
                  Object value)
     {
         this.type = type;
+        this.start_index = index;
+        this.end_index = index+length;
         this.line = line;
         this.col = col;
         this.end_col = col + length;
@@ -96,13 +106,17 @@ public class Token {
      *              representing contents; for numeric literals, numeric value.
      */
     public Token(TokenType type,
+                 int index,
                  int line,
                  int col,
+                 int end_index,
                  int end_line,
                  int end_col,
                  Object value)
     {
         this.type = type;
+        this.start_index = index;
+        this.end_index = end_index;
         this.line = line;
         this.col = col;
         this.end_line = end_line;

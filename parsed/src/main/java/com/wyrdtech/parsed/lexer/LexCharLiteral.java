@@ -13,6 +13,7 @@ public class LexCharLiteral {
     public static Token read(final LexerStream in_stream)
     throws IOException, LexerException
     {
+        int start_index = in_stream.getPosition();
         int start_line = in_stream.getLine();
         int start_col = in_stream.getCol();
 
@@ -30,9 +31,11 @@ public class LexCharLiteral {
             // empty '' character
             in_stream.read(); // consume closing quote
             return new Token(TokenType.LiteralChar,
+                             start_index,
                              start_line,
                              start_col,
-                             2, "''");
+                             2,
+                             "''");
         }
 
         if (next == '\\') {
@@ -50,8 +53,10 @@ public class LexCharLiteral {
 
         //TODO: store code point in token instead?
         return new Token(TokenType.LiteralChar,
+                         start_index,
                          start_line,
                          start_col,
+                         in_stream.getPosition(),
                          in_stream.getLine(),
                          in_stream.getCol(),
                          ch_str);
