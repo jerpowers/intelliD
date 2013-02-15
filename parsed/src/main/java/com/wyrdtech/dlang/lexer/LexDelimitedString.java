@@ -1,14 +1,11 @@
 package com.wyrdtech.dlang.lexer;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 /**
- * Logic for lexing out a delimited string or token string
+ * Logic for lexing out a delimited string
  * q"(foo(xxx))"     -> foo(xxx)
  * q"[foo{]"         -> foo{
- * q{foo(q{hello});} -> foo(q{hello});
  *
  * q"END
  * Multi-line string literals
@@ -20,8 +17,6 @@ import java.util.Deque;
  * TODO: support single character delimiters other than nesting ones?
  * q"$foo$"  -> $foo$
  * The published docs (http://dlang.org/lex.html) are ambiguous on this.
- *
- * TODO: proper support for token strings, with actual tokenization
  */
 public class LexDelimitedString {
 
@@ -32,52 +27,45 @@ public class LexDelimitedString {
 
         int next = in_stream.peek();
         if (next == -1) {
-            throw new LexerException(start_line, start_col, "Unexpected end of input stream when parsing string literal");
+            throw new LexerException(start_line, start_col, "Unexpected end of input stream when parsing delimited string literal");
         }
         if (next != 'q') {
-            throw new LexerException(start_line, start_col, "Not a literal hex string");
+            throw new LexerException(start_line, start_col, "Not a delimited string literal");
         }
 
         in_stream.read();
         next = in_stream.peek();
-        if (next != '"' && next != '{') {
-            throw new LexerException(start_line, start_col, "Not a delimited string");
+        if (next != '"') {
+            throw new LexerException(start_line, start_col, "Not a delimited string literal");
         }
+        in_stream.read(); // consume opening quote
+        next = in_stream.peek();
 
 
-        boolean is_quoted = false;
         boolean is_identifier = false;
 
         StringBuilder delimiter = new StringBuilder();
 
-        if (next == '{') {
+
+
+        if (is_valid_open(next)) {
             delimiter.append(Character.toChars(in_stream.read()));
+            //TODO: support multi-bracket delimiters like "{{ foo }}"?
         }
-        else {
-            is_quoted = true;
+        else if (Character.isLetter(next) || next == '_') {
+            is_identifier = true;
 
-            in_stream.read(); // consume opening quote
+            delimiter.append(Character.toChars(in_stream.read()));
             next = in_stream.peek();
-
-            if (is_valid_open(next)) {
-                delimiter.append(Character.toChars(in_stream.read()));
-                //TODO: support multi-bracket delimiters like "{{ foo }}"?
-            }
-            else if (Character.isLetter(next) || next == '_') {
-                is_identifier = true;
-
+            while (Character.isLetterOrDigit(next) || next == '_') {
                 delimiter.append(Character.toChars(in_stream.read()));
                 next = in_stream.peek();
-                while (Character.isLetterOrDigit(next) || next == '_') {
-                    delimiter.append(Character.toChars(in_stream.read()));
-                    next = in_stream.peek();
-                }
-                if (next != '\n') {
-                    throw new LexerException(in_stream.getLine(), in_stream.getCol(), "String delimiter must be followed by newline");
-                }
-
-                in_stream.read(); // consume newline
             }
+            if (next != '\n') {
+                throw new LexerException(in_stream.getLine(), in_stream.getCol(), "String delimiter must be followed by newline");
+            }
+
+            in_stream.read(); // consume newline
         }
         next = in_stream.peek();
 
@@ -95,20 +83,6 @@ public class LexDelimitedString {
         StringBuilder result = new StringBuilder();
 
         while (next != -1) {
-
-            //TODO: This.  Tokenize, but preserve original for string
-            // For now, just treat as a regular non-token string
-/*
-            if (!is_quoted) {
-                // token string, only tokens are valid inside
-                Token token = null;
-                try {
-                    token = Lexer.next(in_stream);
-                } catch (LexerException e) {
-                    //
-                }
-            }
-*/
 
             if (next == '\n' && is_identifier) {
                 // whether end delimiter or not, newline is part of string
@@ -135,19 +109,12 @@ public class LexDelimitedString {
                 result.append(sb);
             }
             else if (next == end_delim.charAt(0)) {
-                if (is_quoted) {
-                    // check for end nesting delimiter - cheat, doesn't track nesting
-                    // but rather looks for close followed by quote
-                    if (in_stream.peek(2) == '"') {
-                        in_stream.read();
-                        in_stream.read();
-                        break;
-                    }
-                } else {
+                // check for end nesting delimiter - cheat, doesn't track nesting
+                // but rather looks for close followed by quote
+                if (in_stream.peek(2) == '"') {
+                    in_stream.read();
                     in_stream.read();
                     break;
-                    //TODO:
-                    // check for end of token string (!is_quoted implies is tokens)
                 }
             }
 

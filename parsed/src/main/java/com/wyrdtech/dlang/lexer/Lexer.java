@@ -50,6 +50,7 @@ public class Lexer {
 
         Token token;
 
+        int ahead;
         switch (n)
         {
 /*
@@ -61,8 +62,8 @@ public class Lexer {
                 continue;
 */
             case '/':
-                int next = in_stream.peek(2);
-                if (next == '/' || next == '*' || next == '+') {
+                ahead = in_stream.peek(2);
+                if (ahead == '/' || ahead == '*' || ahead == '+') {
                     token = LexComment.read(in_stream);
                 }
                 else {
@@ -70,14 +71,27 @@ public class Lexer {
                 }
                 break;
             case 'r':
-                if (in_stream.peek(2) == '"') {
+                ahead = in_stream.peek(2);
+                if (ahead == '"') {
                     token = LexStringLiteral.read(in_stream);
                     break;
                 }
                 // else default
             case 'x':
-                if (in_stream.peek(2) == '"') {
+                ahead = in_stream.peek(2);
+                if (ahead == '"') {
                     token = LexHexLiteral.read(in_stream);
+                    break;
+                }
+                // else default
+            case 'q':
+                ahead = in_stream.peek(2);
+                if (ahead == '"') {
+                    token = LexDelimitedString.read(in_stream);
+                    break;
+                }
+                else if (ahead == '{') {
+                    token = LexTokenString.read(in_stream);
                     break;
                 }
                 // else default
