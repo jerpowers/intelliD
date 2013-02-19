@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -103,6 +104,8 @@ public class LexerTest {
             tokens.add(tok);
         } while (tok != null && tok.type != TokenType.EOF);
 
+        // There are no tokens after EOF
+        assertNull(lexer.next());
 
         for (int i = 0; i < expected.size(); i++) {
             assertEquals(expected.get(i), tokens.get(i).type);
@@ -128,6 +131,7 @@ public class LexerTest {
         assertEquals("sumLength", tokens.get(48).literalValue);
         assertEquals("lines", tokens.get(50).literalValue);
         assertEquals(0L, tokens.get(52).literalValue);
+
 
     }
 }

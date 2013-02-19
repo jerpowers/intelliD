@@ -36,6 +36,7 @@ public class Lexer {
     public static Token next(LexerStream in_stream) throws IOException, LexerException
     {
         int n = in_stream.peek();
+        int last_pos = in_stream.getPosition();
 
         while (Character.isWhitespace(n)) {
             in_stream.read();
@@ -44,6 +45,10 @@ public class Lexer {
 
         // End of stream
         if (n == -1) {
+            if (last_pos == in_stream.getPosition()) {
+                // already reported EOF, no more tokens
+                return null;
+            }
             return new Token(TokenType.EOF, in_stream.getLine(), in_stream.getCol(), 0);
         }
 
