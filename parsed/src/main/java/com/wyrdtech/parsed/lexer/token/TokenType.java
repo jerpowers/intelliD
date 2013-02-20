@@ -1,4 +1,4 @@
-package com.wyrdtech.parsed.lexer;
+package com.wyrdtech.parsed.lexer.token;
 
 /**
  *

@@ -1,5 +1,9 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenFactory;
+import com.wyrdtech.parsed.lexer.token.TokenType;
+
 import java.io.IOException;
 
 /**
@@ -8,10 +12,15 @@ import java.io.IOException;
  */
 public class LexNumericLiteral {
 
-    // Purely static members for now
-    private LexNumericLiteral() {}
+    private final TokenFactory factory;
+    private final LexerStream in_stream;
 
-    public static Token read(final LexerStream in_stream) throws IOException, LexerException
+    public LexNumericLiteral(TokenFactory factory, LexerStream in_stream) {
+        this.factory = factory;
+        this.in_stream = in_stream;
+    }
+
+    public Token read() throws IOException, LexerException
     {
         int start_index = in_stream.getPosition();
         int start_line = in_stream.getLine();
@@ -253,14 +262,14 @@ public class LexNumericLiteral {
 
 
         // Create token
-        Token token = new Token(TokenType.Literal,
-                                start_index,
-                                start_line,
-                                start_col,
-                                in_stream.getPosition(),
-                                in_stream.getLine(),
-                                in_stream.getCol(),
-                                value);
+        Token token = factory.create(TokenType.Literal,
+                                     start_index,
+                                     start_line,
+                                     start_col,
+                                     in_stream.getPosition(),
+                                     in_stream.getLine(),
+                                     in_stream.getCol(),
+                                     value);
 
         return token;
 

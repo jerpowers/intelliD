@@ -1,5 +1,8 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -8,7 +11,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -93,44 +95,42 @@ public class LexerTest {
         expected.add(TokenType.CloseCurlyBrace);
         expected.add(TokenType.EOF);
 
-        LexerStream ls = new LexerStream(new StringReader(code));
-
-        Lexer lexer = new Lexer(ls);
+        Lexer lexer = new Lexer(new BaseTokenFactory(), new StringReader(code));
 
         List<Token> tokens = new ArrayList<Token>();
         Token tok;
         do {
             tok = lexer.next();
             tokens.add(tok);
-        } while (tok != null && tok.type != TokenType.EOF);
+        } while (tok != null && tok.getType() != TokenType.EOF);
 
         // There are no tokens after EOF
         assertNull(lexer.next());
 
         for (int i = 0; i < expected.size(); i++) {
-            assertEquals(expected.get(i), tokens.get(i).type);
+            assertEquals(expected.get(i), tokens.get(i).getType());
         }
 
-        assertEquals("std", tokens.get(2).literalValue);
-        assertEquals("stdio", tokens.get(4).literalValue);
-        assertEquals("main", tokens.get(7).literalValue);
-        assertEquals("lines", tokens.get(12).literalValue);
-        assertEquals(0L, tokens.get(14).literalValue);
-        assertEquals("sumLength", tokens.get(17).literalValue);
-        assertEquals(0L, tokens.get(19).literalValue);
-        assertEquals("line", tokens.get(23).literalValue);
-        assertEquals("stdin", tokens.get(25).literalValue);
-        assertEquals("byLine", tokens.get(27).literalValue);
-        assertEquals("lines", tokens.get(33).literalValue);
-        assertEquals("sumLength", tokens.get(35).literalValue);
-        assertEquals("line", tokens.get(37).literalValue);
-        assertEquals("length", tokens.get(39).literalValue);
-        assertEquals("writeln", tokens.get(42).literalValue);
-        assertEquals("Average line length: ", tokens.get(44).literalValue);
-        assertEquals("lines", tokens.get(46).literalValue);
-        assertEquals("sumLength", tokens.get(48).literalValue);
-        assertEquals("lines", tokens.get(50).literalValue);
-        assertEquals(0L, tokens.get(52).literalValue);
+        assertEquals("std", tokens.get(2).getValue());
+        assertEquals("stdio", tokens.get(4).getValue());
+        assertEquals("main", tokens.get(7).getValue());
+        assertEquals("lines", tokens.get(12).getValue());
+        assertEquals(0L, tokens.get(14).getValue());
+        assertEquals("sumLength", tokens.get(17).getValue());
+        assertEquals(0L, tokens.get(19).getValue());
+        assertEquals("line", tokens.get(23).getValue());
+        assertEquals("stdin", tokens.get(25).getValue());
+        assertEquals("byLine", tokens.get(27).getValue());
+        assertEquals("lines", tokens.get(33).getValue());
+        assertEquals("sumLength", tokens.get(35).getValue());
+        assertEquals("line", tokens.get(37).getValue());
+        assertEquals("length", tokens.get(39).getValue());
+        assertEquals("writeln", tokens.get(42).getValue());
+        assertEquals("Average line length: ", tokens.get(44).getValue());
+        assertEquals("lines", tokens.get(46).getValue());
+        assertEquals("sumLength", tokens.get(48).getValue());
+        assertEquals("lines", tokens.get(50).getValue());
+        assertEquals(0L, tokens.get(52).getValue());
 
 
     }

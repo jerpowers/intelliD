@@ -1,5 +1,9 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenFactory;
+import com.wyrdtech.parsed.lexer.token.TokenType;
+
 import java.io.IOException;
 
 /**
@@ -11,8 +15,15 @@ import java.io.IOException;
  */
 public class LexHexLiteral {
 
-    public static Token read(final LexerStream in_stream)
-    throws IOException, LexerException
+    private final TokenFactory factory;
+    private final LexerStream in_stream;
+
+    public LexHexLiteral(TokenFactory factory, LexerStream in_stream) {
+        this.factory = factory;
+        this.in_stream = in_stream;
+    }
+
+    public Token read() throws IOException, LexerException
     {
         int start_index = in_stream.getPosition();
         int start_line = in_stream.getLine();
@@ -63,14 +74,14 @@ public class LexHexLiteral {
             result.append(Character.toChars(Integer.parseInt(bite, 16)));
         }
 
-        return new Token(TokenType.LiteralHex,
-                         start_index,
-                         start_line,
-                         start_col,
-                         in_stream.getPosition(),
-                         in_stream.getLine(),
-                         in_stream.getCol(),
-                         result.toString());
+        return factory.create(TokenType.LiteralHex,
+                              start_index,
+                              start_line,
+                              start_col,
+                              in_stream.getPosition(),
+                              in_stream.getLine(),
+                              in_stream.getCol(),
+                              result.toString());
     }
 
     private static boolean is_valid_hex(int chr)

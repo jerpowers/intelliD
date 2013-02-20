@@ -1,5 +1,8 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -17,15 +20,16 @@ public class LexDelimitedStringTest {
         String str = "q\"{foo][}f}\"bar";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
 
-        Token tok = LexDelimitedString.read(ls);
-        Assert.assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals("foo][}f", tok.literalValue);
-        Assert.assertEquals(1, tok.line);
-        Assert.assertEquals(1, tok.col);
-        Assert.assertEquals(1, tok.end_line);
-        Assert.assertEquals(13, tok.end_col);
+        Token tok = lex.read();
+        Assert.assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        Assert.assertEquals("foo][}f", tok.getValue());
+        Assert.assertEquals(1, tok.getLine());
+        Assert.assertEquals(1, tok.getCol());
+        Assert.assertEquals(1, tok.getEndLine());
+        Assert.assertEquals(13, tok.getEndCol());
 
     }
 
@@ -34,15 +38,16 @@ public class LexDelimitedStringTest {
         String str = "q\"((f/*)*/)\"";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
 
-        Token tok = LexDelimitedString.read(ls);
-        Assert.assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals("(f/*)*/", tok.literalValue);
-        Assert.assertEquals(1, tok.line);
-        Assert.assertEquals(1, tok.col);
-        Assert.assertEquals(1, tok.end_line);
-        Assert.assertEquals(13, tok.end_col);
+        Token tok = lex.read();
+        Assert.assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        Assert.assertEquals("(f/*)*/", tok.getValue());
+        Assert.assertEquals(1, tok.getLine());
+        Assert.assertEquals(1, tok.getCol());
+        Assert.assertEquals(1, tok.getEndLine());
+        Assert.assertEquals(13, tok.getEndCol());
 
     }
 
@@ -51,15 +56,16 @@ public class LexDelimitedStringTest {
         String str = "q\"END\nsome\nmultiline\nstring\nEND\" ";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
 
-        Token tok = LexDelimitedString.read(ls);
-        Assert.assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals("some\nmultiline\nstring\n", tok.literalValue);
-        Assert.assertEquals(1, tok.line);
-        Assert.assertEquals(1, tok.col);
-        Assert.assertEquals(5, tok.end_line);
-        Assert.assertEquals(5, tok.end_col);
+        Token tok = lex.read();
+        Assert.assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        Assert.assertEquals("some\nmultiline\nstring\n", tok.getValue());
+        Assert.assertEquals(1, tok.getLine());
+        Assert.assertEquals(1, tok.getCol());
+        Assert.assertEquals(5, tok.getEndLine());
+        Assert.assertEquals(5, tok.getEndCol());
 
     }
 
@@ -67,32 +73,36 @@ public class LexDelimitedStringTest {
     public void empty() throws Exception {
         String str = "";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
 
-        LexDelimitedString.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void not() throws Exception {
         String str = "q[]";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
 
-        LexDelimitedString.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void also_not() throws Exception {
         String str = "\"q{}\"";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
 
-        LexDelimitedString.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void unterminated() throws Exception {
         String str = "q\"{lalala}";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
 
-        LexDelimitedString.read(ls);
+        lex.read();
     }
 
 }

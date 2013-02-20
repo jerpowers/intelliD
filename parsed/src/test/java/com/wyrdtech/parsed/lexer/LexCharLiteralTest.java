@@ -1,5 +1,8 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -16,43 +19,45 @@ public class LexCharLiteralTest {
         String str = "'a' '\\n' '' '\\t'";
         LexerStream ls = new LexerStream(new StringReader(str));
 
-        Token tok = LexCharLiteral.read(ls);
+        LexCharLiteral lex = new LexCharLiteral(new BaseTokenFactory(), ls);
 
-        assertEquals(TokenType.LiteralChar, tok.type);
-        assertEquals("a", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(4, tok.end_col);
+        Token tok = lex.read();
 
-        ls.read();
-        tok = LexCharLiteral.read(ls);
-
-        assertEquals(TokenType.LiteralChar, tok.type);
-        assertEquals("\n", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(5, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(9, tok.end_col);
+        assertEquals(TokenType.LiteralChar, tok.getType());
+        assertEquals("a", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(4, tok.getEndCol());
 
         ls.read();
-        tok = LexCharLiteral.read(ls);
+        tok = lex.read();
 
-        assertEquals(TokenType.LiteralChar, tok.type);
-        assertEquals("''", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(10, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(12, tok.end_col);
+        assertEquals(TokenType.LiteralChar, tok.getType());
+        assertEquals("\n", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(5, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(9, tok.getEndCol());
 
         ls.read();
-        tok = LexCharLiteral.read(ls);
+        tok = lex.read();
 
-        assertEquals(TokenType.LiteralChar, tok.type);
-        assertEquals("\t", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(13, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(17, tok.end_col);
+        assertEquals(TokenType.LiteralChar, tok.getType());
+        assertEquals("''", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(10, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(12, tok.getEndCol());
+
+        ls.read();
+        tok = lex.read();
+
+        assertEquals(TokenType.LiteralChar, tok.getType());
+        assertEquals("\t", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(13, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(17, tok.getEndCol());
     }
 }

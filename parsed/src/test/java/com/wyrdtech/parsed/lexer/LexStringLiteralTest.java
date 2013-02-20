@@ -1,5 +1,8 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -17,15 +20,16 @@ public class LexStringLiteralTest {
         String str = "\"Here is a string\"";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexStringLiteral.read(ls);
-        assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        assertEquals("Here is a string", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(19, tok.end_col);
+        Token tok = lex.read();
+        assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        assertEquals("Here is a string", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(19, tok.getEndCol());
 
         assertEquals(-1, ls.read());
     }
@@ -36,16 +40,17 @@ public class LexStringLiteralTest {
         String str = "\"\\n\\\"\\tfoo\\\" \\x7c\"";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexStringLiteral.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        assertEquals("\n\"\tfoo\" |", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(19, tok.end_col);
+        assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        assertEquals("\n\"\tfoo\" |", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(19, tok.getEndCol());
 
         assertEquals(-1, ls.read());
     }
@@ -55,16 +60,17 @@ public class LexStringLiteralTest {
         String str = "r\"a\\b\\nc\"";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexStringLiteral.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        assertEquals("a\\b\\nc", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(10, tok.end_col);
+        assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        assertEquals("a\\b\\nc", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(10, tok.getEndCol());
 
         assertEquals(-1, ls.read());
     }
@@ -74,16 +80,17 @@ public class LexStringLiteralTest {
         String str = "`a\\b\\nc`";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexStringLiteral.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        assertEquals("a\\b\\nc", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(9, tok.end_col);
+        assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        assertEquals("a\\b\\nc", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(9, tok.getEndCol());
 
         assertEquals(-1, ls.read());
     }
@@ -93,15 +100,16 @@ public class LexStringLiteralTest {
         String str = "\"foo\"c";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexStringLiteral.read(ls);
-        assertEquals(TokenType.LiteralUtf8, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        assertEquals("foo", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(7, tok.end_col);
+        Token tok = lex.read();
+        assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        assertEquals("foo", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(7, tok.getEndCol());
     }
 
     @Test
@@ -109,15 +117,16 @@ public class LexStringLiteralTest {
         String str = "\"foo\"w";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexStringLiteral.read(ls);
-        assertEquals(TokenType.LiteralUtf16, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        assertEquals("foo", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(7, tok.end_col);
+        Token tok = lex.read();
+        assertEquals(TokenType.LiteralUtf16, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        assertEquals("foo", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(7, tok.getEndCol());
     }
 
     @Test
@@ -125,15 +134,16 @@ public class LexStringLiteralTest {
         String str = "\"foo\"d";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexStringLiteral.read(ls);
-        assertEquals(TokenType.LiteralUtf32, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        assertEquals("foo", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(7, tok.end_col);
+        Token tok = lex.read();
+        assertEquals(TokenType.LiteralUtf32, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        assertEquals("foo", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(7, tok.getEndCol());
     }
 
 
@@ -141,7 +151,8 @@ public class LexStringLiteralTest {
     public void empty() throws Exception {
         String str = "";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
 
-        LexStringLiteral.read(ls);
+        lex.read();
     }
 }

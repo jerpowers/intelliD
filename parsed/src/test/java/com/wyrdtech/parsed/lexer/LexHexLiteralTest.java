@@ -1,5 +1,8 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -20,15 +23,16 @@ public class LexHexLiteralTest {
         String expected = sb.toString();
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexHexLiteral lex = new LexHexLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexHexLiteral.read(ls);
-        Assert.assertEquals(TokenType.LiteralHex, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals(expected, tok.literalValue);
-        Assert.assertEquals(1, tok.line);
-        Assert.assertEquals(1, tok.col);
-        Assert.assertEquals(1, tok.end_line);
-        Assert.assertEquals(6, tok.end_col);
+        Token tok = lex.read();
+        Assert.assertEquals(TokenType.LiteralHex, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        Assert.assertEquals(expected, tok.getValue());
+        Assert.assertEquals(1, tok.getLine());
+        Assert.assertEquals(1, tok.getCol());
+        Assert.assertEquals(1, tok.getEndLine());
+        Assert.assertEquals(6, tok.getEndCol());
 
     }
 
@@ -47,16 +51,17 @@ public class LexHexLiteralTest {
         String expected = sb.toString();
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexHexLiteral lex = new LexHexLiteral(new BaseTokenFactory(), ls);
 
-        Token tok = LexHexLiteral.read(ls);
+        Token tok = lex.read();
 
-        Assert.assertEquals(TokenType.LiteralHex, tok.type);
-        assertTrue(tok.literalValue instanceof String);
-        Assert.assertEquals(expected, tok.literalValue);
-        Assert.assertEquals(1, tok.line);
-        Assert.assertEquals(1, tok.col);
-        Assert.assertEquals(1, tok.end_line);
-        Assert.assertEquals(23, tok.end_col);
+        Assert.assertEquals(TokenType.LiteralHex, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        Assert.assertEquals(expected, tok.getValue());
+        Assert.assertEquals(1, tok.getLine());
+        Assert.assertEquals(1, tok.getCol());
+        Assert.assertEquals(1, tok.getEndLine());
+        Assert.assertEquals(23, tok.getEndCol());
 
     }
 
@@ -65,32 +70,36 @@ public class LexHexLiteralTest {
     public void empty() throws Exception {
         String str = "";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexHexLiteral lex = new LexHexLiteral(new BaseTokenFactory(), ls);
 
-        LexHexLiteral.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void not() throws Exception {
         String str = "hex string";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexHexLiteral lex = new LexHexLiteral(new BaseTokenFactory(), ls);
 
-        LexHexLiteral.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void also_not() throws Exception {
         String str = "x00AB";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexHexLiteral lex = new LexHexLiteral(new BaseTokenFactory(), ls);
 
-        LexHexLiteral.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void unterminated() throws Exception {
         String str = "x\"AB CD";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexHexLiteral lex = new LexHexLiteral(new BaseTokenFactory(), ls);
 
-        LexHexLiteral.read(ls);
+        lex.read();
     }
 
 }

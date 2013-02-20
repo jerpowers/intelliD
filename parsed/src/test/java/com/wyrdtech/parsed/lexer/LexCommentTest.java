@@ -1,11 +1,13 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import org.junit.Test;
 
 import java.io.StringReader;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
 
 /**
  *
@@ -16,27 +18,28 @@ public class LexCommentTest {
     public void line() throws Exception {
         String str = "a//bcd\n// //def";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexComment lex = new LexComment(new BaseTokenFactory(), ls);
 
         ls.read();
 
-        Token tok = LexComment.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.LineComment, tok.type);
-        assertEquals("//bcd", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(2, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(7, tok.end_col);
+        assertEquals(TokenType.LineComment, tok.getType());
+        assertEquals("//bcd", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(2, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(7, tok.getEndCol());
 
         ls.read();
-        tok = LexComment.read(ls);
+        tok = lex.read();
 
-        assertEquals(TokenType.LineComment, tok.type);
-        assertEquals("// //def", tok.literalValue);
-        assertEquals(2, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(2, tok.end_line);
-        assertEquals(9, tok.end_col);
+        assertEquals(TokenType.LineComment, tok.getType());
+        assertEquals("// //def", tok.getValue());
+        assertEquals(2, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(2, tok.getEndLine());
+        assertEquals(9, tok.getEndCol());
 
     }
 
@@ -44,20 +47,21 @@ public class LexCommentTest {
     public void block() throws Exception {
         String str = "a/*f\n *b\n *\n*/\ncde";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexComment lex = new LexComment(new BaseTokenFactory(), ls);
 
         ls.read();
 
-        Token tok = LexComment.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.BlockComment, tok.type);
+        assertEquals(TokenType.BlockComment, tok.getType());
         assertEquals("/*f\n" +
                      " *b\n" +
                      " *\n" +
-                     "*/", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(2, tok.col);
-        assertEquals(4, tok.end_line);
-        assertEquals(3, tok.end_col);
+                     "*/", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(2, tok.getCol());
+        assertEquals(4, tok.getEndLine());
+        assertEquals(3, tok.getEndCol());
 
     }
 
@@ -65,18 +69,19 @@ public class LexCommentTest {
     public void block_inline() throws Exception {
         String str = "a=/*b*/c";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexComment lex = new LexComment(new BaseTokenFactory(), ls);
 
         ls.read();
         ls.read();
 
-        Token tok = LexComment.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.BlockComment, tok.type);
-        assertEquals("/*b*/", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(3, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(8, tok.end_col);
+        assertEquals(TokenType.BlockComment, tok.getType());
+        assertEquals("/*b*/", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(3, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(8, tok.getEndCol());
 
     }
 
@@ -84,19 +89,20 @@ public class LexCommentTest {
     public void nest() throws Exception {
         String str = "a/+ /+b\n+/ /+c /+\nd\n +/ e+// +/f;";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexComment lex = new LexComment(new BaseTokenFactory(), ls);
 
         ls.read();
-        Token tok = LexComment.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.BlockCommentNest, tok.type);
+        assertEquals(TokenType.BlockCommentNest, tok.getType());
         assertEquals("/+ /+b\n" +
                      "+/ /+c /+\n" +
                      "d\n" +
-                     " +/ e+// +/", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(2, tok.col);
-        assertEquals(4, tok.end_line);
-        assertEquals(12, tok.end_col);
+                     " +/ e+// +/", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(2, tok.getCol());
+        assertEquals(4, tok.getEndLine());
+        assertEquals(12, tok.getEndCol());
     }
 
     @Test
@@ -105,35 +111,21 @@ public class LexCommentTest {
                      "a = /+ \"+/\" +/ 1\";\n" +
                      "a = /+ /* +/ */ 3;";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexComment lex = new LexComment(new BaseTokenFactory(), ls);
 
         ls.read();
         ls.read();
         ls.read();
         ls.read();
 
-        Token tok = LexComment.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.BlockCommentNest, tok.type);
-        assertEquals("/+ // +/", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(5, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(13, tok.end_col);
-
-        ls.readLine();
-        ls.read();
-        ls.read();
-        ls.read();
-        ls.read();
-
-        tok = LexComment.read(ls);
-
-        assertEquals(TokenType.BlockCommentNest, tok.type);
-        assertEquals("/+ \"+/", tok.literalValue);
-        assertEquals(2, tok.line);
-        assertEquals(5, tok.col);
-        assertEquals(2, tok.end_line);
-        assertEquals(11, tok.end_col);
+        assertEquals(TokenType.BlockCommentNest, tok.getType());
+        assertEquals("/+ // +/", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(5, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(13, tok.getEndCol());
 
         ls.readLine();
         ls.read();
@@ -141,14 +133,29 @@ public class LexCommentTest {
         ls.read();
         ls.read();
 
-        tok = LexComment.read(ls);
+        tok = lex.read();
 
-        assertEquals(TokenType.BlockCommentNest, tok.type);
-        assertEquals("/+ /* +/", tok.literalValue);
-        assertEquals(3, tok.line);
-        assertEquals(5, tok.col);
-        assertEquals(3, tok.end_line);
-        assertEquals(13, tok.end_col);
+        assertEquals(TokenType.BlockCommentNest, tok.getType());
+        assertEquals("/+ \"+/", tok.getValue());
+        assertEquals(2, tok.getLine());
+        assertEquals(5, tok.getCol());
+        assertEquals(2, tok.getEndLine());
+        assertEquals(11, tok.getEndCol());
+
+        ls.readLine();
+        ls.read();
+        ls.read();
+        ls.read();
+        ls.read();
+
+        tok = lex.read();
+
+        assertEquals(TokenType.BlockCommentNest, tok.getType());
+        assertEquals("/+ /* +/", tok.getValue());
+        assertEquals(3, tok.getLine());
+        assertEquals(5, tok.getCol());
+        assertEquals(3, tok.getEndLine());
+        assertEquals(13, tok.getEndCol());
     }
 
 }

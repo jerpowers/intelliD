@@ -1,5 +1,8 @@
 package com.wyrdtech.parsed.lexer;
 
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -135,12 +138,13 @@ public class LexIdentifierTest {
         }
 
         LexerStream ls = new LexerStream(new StringReader(words.toString()));
+        LexIdentifier lex = new LexIdentifier(new BaseTokenFactory(), ls);
 
         for (String word : keywords) {
-            Token tok = LexIdentifier.read(ls);
+            Token tok = lex.read();
 
-            assertEquals(word, tok.literalValue);
-            assertEquals(TokenType.forValue(word), tok.type);
+            assertEquals(word, tok.getValue());
+            assertEquals(TokenType.forValue(word), tok.getType());
 
             ls.read(); // following space
         }
@@ -154,35 +158,36 @@ public class LexIdentifierTest {
         String str = "foo _bar a_2";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexIdentifier lex = new LexIdentifier(new BaseTokenFactory(), ls);
 
-        Token tok = LexIdentifier.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.Identifier, tok.type);
-        assertEquals("foo", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(4, tok.end_col);
-
-        ls.read();
-        tok = LexIdentifier.read(ls);
-
-        assertEquals(TokenType.Identifier, tok.type);
-        assertEquals("_bar", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(5, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(9, tok.end_col);
+        assertEquals(TokenType.Identifier, tok.getType());
+        assertEquals("foo", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(4, tok.getEndCol());
 
         ls.read();
-        tok = LexIdentifier.read(ls);
+        tok = lex.read();
 
-        assertEquals(TokenType.Identifier, tok.type);
-        assertEquals("a_2", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(10, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(13, tok.end_col);
+        assertEquals(TokenType.Identifier, tok.getType());
+        assertEquals("_bar", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(5, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(9, tok.getEndCol());
+
+        ls.read();
+        tok = lex.read();
+
+        assertEquals(TokenType.Identifier, tok.getType());
+        assertEquals("a_2", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(10, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(13, tok.getEndCol());
     }
 
     @Test
@@ -190,25 +195,26 @@ public class LexIdentifierTest {
         String str = "foo.bar";
 
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexIdentifier lex = new LexIdentifier(new BaseTokenFactory(), ls);
 
-        Token tok = LexIdentifier.read(ls);
+        Token tok = lex.read();
 
-        assertEquals(TokenType.Identifier, tok.type);
-        assertEquals("foo", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(1, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(4, tok.end_col);
+        assertEquals(TokenType.Identifier, tok.getType());
+        assertEquals("foo", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(1, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(4, tok.getEndCol());
 
         ls.read();
-        tok = LexIdentifier.read(ls);
+        tok = lex.read();
 
-        assertEquals(TokenType.Identifier, tok.type);
-        assertEquals("bar", tok.literalValue);
-        assertEquals(1, tok.line);
-        assertEquals(5, tok.col);
-        assertEquals(1, tok.end_line);
-        assertEquals(8, tok.end_col);
+        assertEquals(TokenType.Identifier, tok.getType());
+        assertEquals("bar", tok.getValue());
+        assertEquals(1, tok.getLine());
+        assertEquals(5, tok.getCol());
+        assertEquals(1, tok.getEndLine());
+        assertEquals(8, tok.getEndCol());
 
     }
 
@@ -217,24 +223,27 @@ public class LexIdentifierTest {
         // Reserved identifier not in keyword list
         String str = "__FOO__";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexIdentifier lex = new LexIdentifier(new BaseTokenFactory(), ls);
 
-        LexIdentifier.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void empty() throws Exception {
         String str = "";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexIdentifier lex = new LexIdentifier(new BaseTokenFactory(), ls);
 
-        LexIdentifier.read(ls);
+        lex.read();
     }
 
     @Test(expected = LexerException.class)
     public void not() throws Exception {
         String str = "9d";
         LexerStream ls = new LexerStream(new StringReader(str));
+        LexIdentifier lex = new LexIdentifier(new BaseTokenFactory(), ls);
 
-        LexIdentifier.read(ls);
+        lex.read();
     }
 
 }
