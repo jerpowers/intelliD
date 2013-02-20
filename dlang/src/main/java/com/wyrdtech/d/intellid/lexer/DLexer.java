@@ -41,6 +41,8 @@ public class DLexer extends Lexer {
         this.lexer = new com.wyrdtech.parsed.lexer.Lexer(in_stream);
 
         this.token = null;
+
+        this.advance();
     }
 
     @Override

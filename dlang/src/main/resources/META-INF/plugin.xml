@@ -43,6 +43,12 @@
         <!-- Register D file type -->
         <fileTypeFactory implementation="com.wyrdtech.d.intellid.DFileTypeFactory"/>
 
+        <!-- Syntax highlighting -->
+        <lang.syntaxHighlighterFactory key="D" implementationClass="com.wyrdtech.d.intellid.DHighlighterFactory"/>
+
+        <colorSettingsPage implementation="com.wyrdtech.d.intellid.DColorSettingsPage"/>
+
+
         <!-- Parser for D source
         <lang.parserDefinition language="D" implementationClass="com.wyrdtech.d.intellid.parser.DParserDefinition"/>
         -->

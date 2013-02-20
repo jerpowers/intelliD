@@ -16,9 +16,10 @@ public class DLanguage extends Language {
     public DLanguage() {
         super("D", "text/x-dsrc");
 
-        SyntaxHighlighterFactory.LANGUAGE_FACTORY.addExplicitExtension(this, new DHighlighterFactory());
+//        SyntaxHighlighterFactory.LANGUAGE_FACTORY.addExplicitExtension(this, new DHighlighterFactory());
     }
 
+/*
     private static class DHighlighterFactory extends SingleLazyInstanceSyntaxHighlighterFactory {
         @NotNull
         @Override
@@ -26,4 +27,5 @@ public class DLanguage extends Language {
             return new DHighlighter();
         }
     }
+*/
 }
