@@ -3,7 +3,6 @@ package com.wyrdtech.parsed.lexer.token;
 /**
  * A token from lexing the D language.
  *
- *
  */
 public class BaseToken implements Token {
 
