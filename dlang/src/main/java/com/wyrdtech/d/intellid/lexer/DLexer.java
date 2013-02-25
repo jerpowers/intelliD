@@ -6,7 +6,9 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.text.CharSequenceReader;
 import com.wyrdtech.parsed.lexer.LexerException;
 import com.wyrdtech.parsed.lexer.LexerStream;
-import com.wyrdtech.parsed.lexer.Token;
+import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
+import com.wyrdtech.parsed.lexer.token.Token;
+import com.wyrdtech.parsed.lexer.token.TokenFactory;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -16,6 +18,8 @@ import java.io.IOException;
  */
 public class DLexer extends Lexer {
 
+    private final TokenFactory factory;
+
     private CharSequence buffer;
     private LexerStream in_stream; // buffer wrapper
 
@@ -24,10 +28,14 @@ public class DLexer extends Lexer {
     private int cur_offset;
 
     private com.wyrdtech.parsed.lexer.Lexer lexer; // actual lexer
-    private com.wyrdtech.parsed.lexer.Token token; // current token
+    private Token token; // current token
 
-
-    public DLexer() { }
+    //TODO: inject token factory?
+    public DLexer() {
+        // TODO: generate custom tokens
+//        this.factory = new DTokenFactory();
+        this.factory = new BaseTokenFactory();
+    }
 
 
     @Override
@@ -38,7 +46,7 @@ public class DLexer extends Lexer {
         this.cur_offset = start_offset;
 
         this.in_stream = new LexerStream(new CharSequenceReader(buffer.subSequence(startOffset, endOffset)));
-        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(in_stream);
+        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(factory, in_stream);
 
         this.token = null;
 
@@ -54,7 +62,10 @@ public class DLexer extends Lexer {
     @Nullable
     @Override
     public IElementType getTokenType() {
-        return DTokenType.valueOf(token);
+        if (token == null) {
+            return null;
+        }
+        return DTokenType.valueOf(token.getType());
     }
 
     @Override
@@ -62,7 +73,7 @@ public class DLexer extends Lexer {
         if (token == null) {
             return start_offset;
         }
-        return start_offset + token.start_index;
+        return start_offset + token.getStartIndex();
     }
 
     @Override
@@ -70,7 +81,7 @@ public class DLexer extends Lexer {
         if (token == null) {
             return start_offset;
         }
-        return start_offset + token.end_index;
+        return start_offset + token.getEndIndex();
     }
 
     @Override
@@ -94,7 +105,7 @@ public class DLexer extends Lexer {
     public void restore(final LexerPosition position) {
 
         this.in_stream = new LexerStream(new CharSequenceReader(buffer.subSequence(position.getOffset(), end_offset)));
-        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(in_stream);
+        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(factory, in_stream);
     }
 
     @Override
