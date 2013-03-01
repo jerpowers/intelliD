@@ -9,6 +9,7 @@ import com.wyrdtech.parsed.lexer.LexerStream;
 import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
 import com.wyrdtech.parsed.lexer.token.Token;
 import com.wyrdtech.parsed.lexer.token.TokenFactory;
+import com.wyrdtech.parsed.lexer.token.TokenType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class DLexer extends Lexer {
     private com.wyrdtech.parsed.lexer.Lexer lexer; // actual lexer
     private Token token; // current token
 
-    private int state;
+    private int state; // current token type, as ordinal
+
 
     //TODO: inject token factory?
     public DLexer() {
@@ -51,7 +53,22 @@ public class DLexer extends Lexer {
 
         this.state = initialState;
 
-        this.advance();
+        if (state <= 0) {
+            // Not inside a known token, advance to get next token
+            this.advance();
+        }
+        else {
+            // Started in the middle of a token, set as current token
+            TokenType t = TokenType.Unknown;
+            for (TokenType type : TokenType.values()) {
+                if (type.ordinal() == state) {
+                    t = type;
+                    break;
+                }
+            }
+            this.token = factory.create(t, lexer.position(), 0, 0);
+        }
+
     }
 
     @Override
