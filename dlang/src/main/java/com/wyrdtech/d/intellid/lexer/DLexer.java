@@ -21,7 +21,6 @@ public class DLexer extends Lexer {
     private final TokenFactory factory;
 
     private CharSequence buffer;
-    private LexerStream in_stream; // buffer wrapper
 
     private int start_offset;
     private int end_offset;
@@ -30,10 +29,11 @@ public class DLexer extends Lexer {
     private com.wyrdtech.parsed.lexer.Lexer lexer; // actual lexer
     private Token token; // current token
 
+    private int state;
+
     //TODO: inject token factory?
     public DLexer() {
         // TODO: generate custom tokens
-//        this.factory = new DTokenFactory();
         this.factory = new BaseTokenFactory();
     }
 
@@ -45,18 +45,18 @@ public class DLexer extends Lexer {
         this.end_offset = endOffset;
         this.cur_offset = start_offset;
 
-        this.in_stream = new LexerStream(new CharSequenceReader(buffer.subSequence(startOffset, endOffset)));
-        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(factory, in_stream);
+        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(factory, new CharSequenceReader(buffer.subSequence(startOffset, endOffset)));
 
         this.token = null;
+
+        this.state = initialState;
 
         this.advance();
     }
 
     @Override
     public int getState() {
-        //TODO: support state, for incremental use
-        return 0;
+        return state;
     }
 
     @Nullable
@@ -88,11 +88,14 @@ public class DLexer extends Lexer {
     public void advance() {
         try {
             token = lexer.next();
-            cur_offset = start_offset + in_stream.getPosition();
+            cur_offset = start_offset + lexer.position();
+            if (token != null) {
+                state = token.getType().ordinal();
+            } else {
+                state = -1;
+            }
         } catch (IOException e) {
-            // TODO: log/throw
-        } catch (LexerException e) {
-            // TODO: log/throw
+            state = -1;
         }
     }
 
@@ -103,9 +106,7 @@ public class DLexer extends Lexer {
 
     @Override
     public void restore(final LexerPosition position) {
-
-        this.in_stream = new LexerStream(new CharSequenceReader(buffer.subSequence(position.getOffset(), end_offset)));
-        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(factory, in_stream);
+        this.lexer = new com.wyrdtech.parsed.lexer.Lexer(factory, new CharSequenceReader(buffer.subSequence(position.getOffset(), end_offset)));
     }
 
     @Override

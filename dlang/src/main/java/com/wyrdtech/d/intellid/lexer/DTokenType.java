@@ -15,6 +15,8 @@ import java.util.Map;
  * Dynamically creates one instance of a DElementType for each ParserD type as
  * valueOf() is called.  Certain tokens are created ahead of time, to allow for easier
  * reference elsewhere - such as comment and whitespace tokens.
+ *
+ * TODO: use parent psi.TokenType values?
  */
 public abstract class DTokenType implements com.intellij.psi.TokenType {
 
@@ -23,7 +25,6 @@ public abstract class DTokenType implements com.intellij.psi.TokenType {
 
     // Some explicit tokens
 //    public static final IElementType UNKNOWN = valueOf("Unknown");
-    public static final DElementType EOF = valueOf(TokenType.EOF);
 
     public static final DElementType LINE_COMMENT = valueOf(TokenType.LineComment);
     public static final DElementType DOC_LINE_COMMENT = valueOf(TokenType.DocLineComment);
@@ -41,7 +42,9 @@ public abstract class DTokenType implements com.intellij.psi.TokenType {
     public static final DElementType IDENTIFIER = valueOf(TokenType.Identifier);
 
     // Token sets for special treatment while parsing
-    public static final TokenSet WHITESPACES = TokenSet.create(com.intellij.psi.TokenType.WHITE_SPACE, EOF);
+    public static final TokenSet WHITESPACES = TokenSet.create(valueOf(TokenType.EOF),
+                                                               valueOf(TokenType.Whitespace));
+
     public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT,
                                                             DOC_LINE_COMMENT,
                                                             BLOCK_COMMENT,
@@ -284,6 +287,9 @@ public abstract class DTokenType implements com.intellij.psi.TokenType {
         }
         if (DTokenType.STRING_LITERALS.contains(type)) {
             set = DTokenType.STRING_LITERALS;
+        }
+        if (DTokenType.WHITESPACES.contains(type)) {
+            set = DTokenType.WHITESPACES;
         }
         return set;
     }
