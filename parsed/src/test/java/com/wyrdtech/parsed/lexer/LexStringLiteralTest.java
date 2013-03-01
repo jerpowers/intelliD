@@ -155,4 +155,14 @@ public class LexStringLiteralTest {
 
         lex.read();
     }
+
+    @Test(expected = LexerException.class)
+    public void unterminated() throws Exception {
+        String str = "\"yadayada";
+        LexerStream ls = new LexerStream(new StringReader(str));
+        LexStringLiteral lex = new LexStringLiteral(new BaseTokenFactory(), ls);
+
+        lex.read();
+    }
+
 }

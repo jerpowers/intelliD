@@ -56,16 +56,20 @@ public class LexDelimitedString {
 
 
         boolean is_identifier = false;
+        boolean is_nesting = false;
+        int nests = 0;
 
         StringBuilder delimiter = new StringBuilder();
 
 
 
-        if (is_valid_open(next)) {
+        if (is_nesting_open(next)) {
+            is_nesting = true;
             delimiter.append(Character.toChars(in_stream.read()));
             //TODO: support multi-bracket delimiters like "{{ foo }}"?
         }
         else if (Character.isLetter(next) || next == '_') {
+            //TODO: use actual identifier lexing logic
             is_identifier = true;
 
             delimiter.append(Character.toChars(in_stream.read()));
@@ -79,6 +83,10 @@ public class LexDelimitedString {
             }
 
             in_stream.read(); // consume newline
+        }
+        else {
+            // non-identifier, non-nesting, just single char
+            delimiter.append(Character.toChars(in_stream.read()));
         }
         next = in_stream.peek();
 
@@ -121,13 +129,20 @@ public class LexDelimitedString {
                 // false alarm
                 result.append(sb);
             }
+            else if (is_nesting && next == start_delim.charAt(0)) {
+                nests++;
+            }
             else if (next == end_delim.charAt(0)) {
-                // check for end nesting delimiter - cheat, doesn't track nesting
-                // but rather looks for close followed by quote
-                if (in_stream.peek(2) == '"') {
-                    in_stream.read();
-                    in_stream.read();
-                    break;
+                nests--;
+                if (nests < 0) {
+                    // look for close followed by quote
+                    if (in_stream.peek(2) == '"') {
+                        in_stream.read();
+                        in_stream.read();
+                        break;
+                    } else {
+                        throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Improperly delimited string");
+                    }
                 }
             }
 
@@ -151,7 +166,7 @@ public class LexDelimitedString {
     }
 
 
-    private static boolean is_valid_open(int c) {
+    private static boolean is_nesting_open(int c) {
         if (c == -1) {
             return false;
         }

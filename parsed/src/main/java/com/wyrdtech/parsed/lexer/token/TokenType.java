@@ -4,6 +4,9 @@ package com.wyrdtech.parsed.lexer.token;
  *
  */
 public enum TokenType {
+
+    Unknown,
+
     //TODO: comment types as sub-token-types?
     LineComment,
     BlockComment,
@@ -14,6 +17,8 @@ public enum TokenType {
 
     // ----- terminal classes -----
     EOF,
+    Whitespace,
+
     Identifier,
     Literal,
     LiteralChar,
@@ -221,14 +226,12 @@ public enum TokenType {
     __parameters("__parameters"),
 
     // Meta tokens
-/*
     __DATE__("__DATE__"),
     __TIME__("__TIME__"),
     __TIMESTAMP__("__TIMESTAMP__"),
     __VENDOR__("__VENDOR__"),
     __VERSION__("__VERSION__"),
     __EOF__("__EOF__"),
-*/
 /*
     _unused(""),
     INVALID(""),

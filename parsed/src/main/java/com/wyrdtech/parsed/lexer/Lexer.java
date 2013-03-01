@@ -33,6 +33,8 @@ public class Lexer {
     private final TokenFactory factory;
     private final LexerStream in_stream;
 
+    private boolean eof;
+
 
     // Sub-lexers for tokenizing once the next token type is determined
     private final LexCharLiteral lexChar;
@@ -49,9 +51,10 @@ public class Lexer {
         this(tokenFactory, new LexerStream(inStream));
     }
 
-    public Lexer(TokenFactory tokenFactory, LexerStream inStream) {
+    private Lexer(TokenFactory tokenFactory, LexerStream inStream) {
         this.factory = tokenFactory;
         this.in_stream = inStream;
+        this.eof = false;
 
 
         //TODO: inject sub-lexers for more control
@@ -69,42 +72,86 @@ public class Lexer {
         // TODO: Ignore any first-line '#!'
     }
 
-    public Token next() throws IOException, LexerException
-    {
-        int n = in_stream.peek();
-        int last_pos = in_stream.getPosition();
+    /**
+     * @return Current position on the Reader stream, relative to
+     *         position of stream when lexer was created.
+     */
+    public int position() {
+        return in_stream.getPosition();
+    }
 
-        while (Character.isWhitespace(n)) {
+    /**
+     * Read the next token off the stream and return it.
+     * If there is an error tokenizing, will return a token with type
+     * TokenType.Unknown, with the stream having consumed as much as could
+     * be made sense of before encountering the error.
+     * Subsequent calls to next() may continue to return an Unknown token,
+     * until a recognized token is encountered.
+     *
+     * @return Next token on the stream
+     * @throws IOException
+     */
+    public Token next() throws IOException
+    {
+        Token token;
+        try {
+            token = _next();
+        } catch (LexerException e) {
+            token = factory.create(TokenType.Unknown, in_stream.getPosition(), in_stream.getLine(), in_stream.getCol());
             in_stream.read();
-            n = in_stream.peek();
         }
+
+        // TODO: Catch and release special tokens: meta tokens and '#line'
+
+        return token;
+    }
+
+    public Token _next() throws IOException, LexerException
+    {
+
+        int n = in_stream.peek();
 
         // End of stream
         if (n == -1) {
-            if (last_pos == in_stream.getPosition()) {
+            if (eof) {
                 // already reported EOF, no more tokens
                 return null;
             }
+            eof = true;
             return factory.create(TokenType.EOF,
                                   in_stream.getLine(),
                                   in_stream.getCol(),
                                   0);
         }
 
+        // Whitespace
+        if (Character.isWhitespace(n)) {
+            StringBuilder whites = new StringBuilder();
+            int pos = in_stream.getPosition();
+            int line = in_stream.getLine();
+            int col = in_stream.getCol();
+            do {
+                whites.append(Character.toChars(in_stream.read()));
+                n = in_stream.peek();
+            }
+            while (Character.isWhitespace(n));
 
+            return factory.create(TokenType.Whitespace,
+                                  pos,
+                                  line,
+                                  col,
+                                  in_stream.getPosition(),
+                                  in_stream.getLine(),
+                                  in_stream.getCol(),
+                                  whites.toString());
+        }
+
+
+        // All other tokens
         Token token;
-
         int ahead;
         switch (n)
         {
-/*
-            case ' ':
-            case '\t':
-                continue;
-//          case '\r':
-            case '\n':
-                continue;
-*/
             case '/':
                 ahead = in_stream.peek(2);
                 if (ahead == '/' || ahead == '*' || ahead == '+') {

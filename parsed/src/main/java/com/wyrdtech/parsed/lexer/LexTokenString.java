@@ -62,9 +62,12 @@ public class LexTokenString {
             }
 
             result.append(token.getValue());
-            try {
-                token = parent.next();
-            } catch (LexerException e) {
+
+            token = parent.next();
+            if (token == null ||
+                token.getType().equals(TokenType.EOF) ||
+                token.getType().equals(TokenType.Unknown))
+            {
                 throw new LexerException(in_stream.getLine(), in_stream.getCol(), "Invalid token inside token string");
             }
 

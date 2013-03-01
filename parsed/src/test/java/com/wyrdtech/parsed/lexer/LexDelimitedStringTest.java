@@ -16,8 +16,8 @@ import static junit.framework.Assert.assertTrue;
 public class LexDelimitedStringTest {
 
     @Test
-    public void bracketed() throws Exception {
-        String str = "q\"{foo][}f}\"bar";
+    public void normal() throws Exception {
+        String str = "q\"!foo!\"";
 
         LexerStream ls = new LexerStream(new StringReader(str));
         LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
@@ -25,11 +25,29 @@ public class LexDelimitedStringTest {
         Token tok = lex.read();
         Assert.assertEquals(TokenType.LiteralUtf8, tok.getType());
         assertTrue(tok.getValue() instanceof String);
-        Assert.assertEquals("foo][}f", tok.getValue());
+        Assert.assertEquals("foo", tok.getValue());
         Assert.assertEquals(1, tok.getLine());
         Assert.assertEquals(1, tok.getCol());
         Assert.assertEquals(1, tok.getEndLine());
-        Assert.assertEquals(13, tok.getEndCol());
+        Assert.assertEquals(9, tok.getEndCol());
+
+    }
+
+    @Test
+    public void bracketed() throws Exception {
+        String str = "q\"{foo][{b}f}\"bar";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
+
+        Token tok = lex.read();
+        Assert.assertEquals(TokenType.LiteralUtf8, tok.getType());
+        assertTrue(tok.getValue() instanceof String);
+        Assert.assertEquals("foo][{b}f", tok.getValue());
+        Assert.assertEquals(1, tok.getLine());
+        Assert.assertEquals(1, tok.getCol());
+        Assert.assertEquals(1, tok.getEndLine());
+        Assert.assertEquals(15, tok.getEndCol());
 
     }
 
@@ -105,4 +123,22 @@ public class LexDelimitedStringTest {
         lex.read();
     }
 
+    @Test(expected = LexerException.class)
+    public void partial_delimiter() throws Exception {
+        String str = "q\"/abc/def/\"";
+        LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
+
+        lex.read();
+    }
+
+    @Test(expected = LexerException.class)
+    public void unnested() throws Exception {
+        String str = "q\"{foo][}f}\"bar";
+
+        LexerStream ls = new LexerStream(new StringReader(str));
+        LexDelimitedString lex = new LexDelimitedString(new BaseTokenFactory(), ls);
+
+        lex.read();
+    }
 }

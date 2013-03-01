@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.StringReader;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -52,6 +53,14 @@ public class LexTokenStringTest {
 
     }
 
+    public void unterminated() throws Exception {
+        String str = "q{lalala";
+        Lexer lexer = new Lexer(new BaseTokenFactory(), new StringReader(str));
+
+        Token tok = lexer.next();
+        assertEquals(TokenType.Unknown, tok.getType());
+    }
+
     @Test(expected = LexerException.class)
     public void empty() throws Exception {
         String str = "";
@@ -77,14 +86,6 @@ public class LexTokenStringTest {
         LexTokenString lex = new LexTokenString(new BaseTokenFactory(), ls, null);
 
         lex.read();
-    }
-
-    @Test(expected = LexerException.class)
-    public void unterminated() throws Exception {
-        String str = "q{lalala";
-        Lexer lexer = new Lexer(new BaseTokenFactory(), new StringReader(str));
-
-        lexer.next();
     }
 
 }

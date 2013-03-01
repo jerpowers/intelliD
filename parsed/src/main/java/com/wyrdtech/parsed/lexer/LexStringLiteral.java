@@ -53,28 +53,7 @@ public class LexStringLiteral {
         in_stream.read(); // consume opening quote
 
         next = in_stream.peek();
-        while (next != -1) {
-
-            if (next == initial) {
-                in_stream.read(); // consume closing quote
-                next = in_stream.peek();
-
-                // end of literal, check for suffix
-                if (next == 'c') {
-                    type = TokenType.LiteralUtf8;
-                    in_stream.read();
-                }
-                else if (next == 'w') {
-                    type = TokenType.LiteralUtf16;
-                    in_stream.read();
-                }
-                else if (next == 'd') {
-                    type = TokenType.LiteralUtf32;
-                    in_stream.read();
-                }
-
-                break; // exit loop
-            }
+        while (next != -1 && next != initial) {
 
             if (next == '\\' && !is_literal) {
                 sb.append(Character.toChars(LexEscape.read(in_stream)));
@@ -84,6 +63,28 @@ public class LexStringLiteral {
 
             next = in_stream.peek();
         }
+
+        if (next == -1) {
+            throw new LexerException(start_line, start_col, "Unexpected end of input stream when parsing string literal");
+        }
+
+        in_stream.read(); // consume closing quote
+        next = in_stream.peek();
+
+        // end of literal, check for suffix
+        if (next == 'c') {
+            type = TokenType.LiteralUtf8;
+            in_stream.read();
+        }
+        else if (next == 'w') {
+            type = TokenType.LiteralUtf16;
+            in_stream.read();
+        }
+        else if (next == 'd') {
+            type = TokenType.LiteralUtf32;
+            in_stream.read();
+        }
+
 
         return factory.create(type,
                               start_index,
