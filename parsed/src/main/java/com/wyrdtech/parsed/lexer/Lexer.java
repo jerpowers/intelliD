@@ -87,8 +87,10 @@ public class Lexer {
      * be made sense of before encountering the error.
      * Subsequent calls to next() may continue to return an Unknown token,
      * until a recognized token is encountered.
+     * When end of stream is reached an EOF token will be returned.  Subsequent
+     * calls to next() will return null.
      *
-     * @return Next token on the stream
+     * @return Next token on the stream, or null if there are no more tokens.
      * @throws IOException
      */
     public Token next() throws IOException
