@@ -1,9 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<testsuite name="com.wyrdtech.dlang.lexer.LexDelimitedStringTest" tests="3" failures="0" errors="0" timestamp="2013-02-14T21:53:12" hostname="jeremy" time="0.002">
-  <properties/>
-  <testcase name="identifier" classname="com.wyrdtech.dlang.lexer.LexDelimitedStringTest" time="0.0"/>
-  <testcase name="bracketed" classname="com.wyrdtech.dlang.lexer.LexDelimitedStringTest" time="0.0"/>
-  <testcase name="parens" classname="com.wyrdtech.dlang.lexer.LexDelimitedStringTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
