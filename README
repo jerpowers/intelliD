@@ -1,0 +1,12 @@
+D Language plugin for JetBrains IntelliJ
+
+Very much incomplete at the moment.
+
+Consists of two modules:
+
+* Dlang, the IntelliJ plugin
+* ParseD, a D language lexer/parser written in java
+
+All code is released with the 'unlicense' and is placed in the public domain.
+You are free to take it and use for whatever.  Attribution and contributions
+are, however, appreciated.
