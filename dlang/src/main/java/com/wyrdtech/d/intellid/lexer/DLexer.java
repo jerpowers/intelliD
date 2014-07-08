@@ -4,12 +4,11 @@ import com.intellij.lexer.Lexer;
 import com.intellij.lexer.LexerPosition;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.text.CharSequenceReader;
-import com.wyrdtech.parsed.lexer.LexerException;
-import com.wyrdtech.parsed.lexer.LexerStream;
 import com.wyrdtech.parsed.lexer.token.BaseTokenFactory;
 import com.wyrdtech.parsed.lexer.token.Token;
 import com.wyrdtech.parsed.lexer.token.TokenFactory;
 import com.wyrdtech.parsed.lexer.token.TokenType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -41,7 +40,7 @@ public class DLexer extends Lexer {
 
 
     @Override
-    public void start(final CharSequence buffer, final int startOffset, final int endOffset, final int initialState) {
+    public void start(@NotNull final CharSequence buffer, final int startOffset, final int endOffset, final int initialState) {
         this.buffer = buffer;
         this.start_offset = startOffset;
         this.end_offset = endOffset;
@@ -116,16 +115,18 @@ public class DLexer extends Lexer {
         }
     }
 
+    @NotNull
     @Override
     public LexerPosition getCurrentPosition() {
         return new Position(cur_offset, getState());
     }
 
     @Override
-    public void restore(final LexerPosition position) {
+    public void restore(@NotNull final LexerPosition position) {
         this.lexer = new com.wyrdtech.parsed.lexer.Lexer(factory, new CharSequenceReader(buffer.subSequence(position.getOffset(), end_offset)));
     }
 
+    @NotNull
     @Override
     public CharSequence getBufferSequence() {
         return this.buffer;
