@@ -1,11 +1,6 @@
 package com.wyrdtech.d.intellid;
 
 import com.intellij.lang.Language;
-import com.intellij.openapi.fileTypes.SingleLazyInstanceSyntaxHighlighterFactory;
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
-import com.wyrdtech.d.intellid.lexer.DHighlighter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  *
