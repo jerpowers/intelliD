@@ -2,7 +2,6 @@ package com.wyrdtech.d.intellid.lexer;
 
 import com.intellij.psi.tree.IElementType;
 import com.wyrdtech.d.intellid.DLanguage;
-import com.wyrdtech.parsed.lexer.token.Token;
 import com.wyrdtech.parsed.lexer.token.TokenType;
 
 /**
