@@ -174,17 +174,11 @@ public class LexDelimitedString {
     }
 
     private static int valid_close(int open) {
-        if (open == '[') {
-            return ']';
-        }
-        if (open == '(') {
-            return ')';
-        }
-        if (open == '<') {
-            return '>';
-        }
-        if (open == '{') {
-            return '}';
+        switch(open) {
+            case '[': return ']';
+            case '(': return ')';
+            case '<': return '>';
+            case '{': return '}';
         }
         return open;
     }
